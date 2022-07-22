@@ -10,6 +10,15 @@
 //---------------------------------------------------------------------------
 
 
+// !!!
+const int bits_in_byte = 8;
+const int bytes_in_kilobyte = 1024;
+
+std::uintmax_t Convert_Size_KiloByte(std::uintmax_t val) {
+   return val / bytes_in_kilobyte + 1;
+   }
+
+
 std::ostream& operator << (std::ostream& out, Dir_Stats_Type const& val) {
    return out
        << std::left << std::setw(15) << "files:"       << std::right << std::setw(20) << std::get<0>(val) << std::endl
@@ -124,6 +133,22 @@ size_t CheckFileSize(fs::path const& strFile) {
    return ret;
    }
 
+
+// C++20 format for date time, C++Builder only C++17
+void ShowFiles(std::ostream& out, std::vector<fs::path> const& files) {
+   std::for_each(files.begin(), files.end(), [&out](auto p) {
+              if(fs::is_directory(p))
+                 std::cout << p << std::endl;
+              else {
+                 auto ftime = std::filesystem::last_write_time(p);
+                 auto tt = decltype(ftime)::clock::to_time_t(ftime);
+                 std::tm *loctime = std::localtime(&tt);
+                 out << p << '\t'
+                     << std::put_time(loctime, "%d.%m.%Y %T") << '\t'
+                     << Convert_Size_KiloByte(fs::file_size(p)) << " KB" << std::endl;
+                 }
+              });
+   }
 
 
 

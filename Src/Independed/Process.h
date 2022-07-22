@@ -33,8 +33,6 @@ class TProcess {
       void ParseAction();
       void CountAction();
 
-   private:
-      void ShowFiles(std::vector<fs::path> const& files);
 };
 
 #endif

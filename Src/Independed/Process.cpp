@@ -11,11 +11,13 @@
 
 #include "FileUtil.h"
 
+#include "pugixml.hpp"
+
+
 #include <iostream>
 #include <iomanip>
 #include <string>
 #include <string_view>
-// !!! #include <filesystem>
 #include <tuple>
 #include <vector>
 #include <set>
@@ -68,7 +70,6 @@ std::vector<tplList<Narrow>> TProcess::Count_Columns {
               tplList<Narrow> { "size",         600, EMyAlignmentType::right }
               };
 
-// !!!
 std::vector<tplList<Narrow>> TProcess::File_Columns {
     		  tplList<Narrow> { "file",       1310, EMyAlignmentType::left },
               tplList<Narrow> { "time",        265, EMyAlignmentType::left },
@@ -88,8 +89,6 @@ using tplData = std::tuple<std::string,  //  0 project
                            size_t,       // 10 rows
                            std::string,  // 11 formtype
                            std::string>; // 12 design class
-
-// !!! namespace fs = std::filesystem;
 
 
 
@@ -132,30 +131,6 @@ size_t parse(string_type const& source, std::string const& del, container& list)
    }
 
 
-// !!!
-const int bits_in_byte = 8;
-const int bytes_in_kilobyte = 1024;
-
-std::uintmax_t Convert_Size_KiloByte(std::uintmax_t val) {
-   return val / bytes_in_kilobyte + 1;
-   }
-
-
-// C++20 format for date time, C++Builder only C++17
-void TProcess::ShowFiles(std::vector<fs::path> const& files) {
-   std::for_each(files.begin(), files.end(), [](auto p) {
-              if(fs::is_directory(p))
-                 std::cout << p << std::endl;
-              else {
-                 auto ftime = std::filesystem::last_write_time(p);
-                 auto tt = decltype(ftime)::clock::to_time_t(ftime);
-                 std::tm *loctime = std::localtime(&tt);
-                 std::cout << p << '\t'
-                           << std::put_time(loctime, "%d.%m.%Y %T") << '\t'
-                           << Convert_Size_KiloByte(fs::file_size(p)) << " KB" << std::endl;
-                 }
-              });
-   }
 
 
 
@@ -219,8 +194,9 @@ void TProcess::ShowAction() {
          fs::path fsPath = *strPath;
          auto ret = Call(time, Find, std::ref(files), std::cref(fsPath), std::cref(extensions), true);
          std::clog << "function \"Find\" procecced in "
-                   << std::setprecision(3) << time.count()/1000. << " sec" << std::endl;
-         ShowFiles(files);
+                   << std::setprecision(3) << time.count()/1000. << " sec, "
+                   << files.size() << " files found" << std::endl;
+         ShowFiles(std::cout, files);
          }
       }
    catch(std::exception& ex) {
@@ -229,7 +205,38 @@ void TProcess::ShowAction() {
       }
    }
 
-
+void Parse(fs::path const& base, fs::path const strFile, std::vector<tplData>& projects) {
+   try {
+      pugi::xml_document doc;
+      pugi::xml_parse_result result = doc.load_file(strFile.string().c_str(), pugi::parse_default | pugi::parse_fragment);
+      if(result) {
+         pugi::xml_node root = doc.document_element();
+         pugi::xpath_node xpathNode = root.select_single_node("ItemGroup");
+         if(xpathNode) {
+            pugi::xml_node selNode = xpathNode.node();
+            for(pugi::xml_node child = selNode.child("CppCompile"); child; child = child.next_sibling("CppCompile")) {
+               tplData row;
+               std::get< 0>(row) = strFile.filename().string();
+               std::get< 1>(row) = fs::relative(strFile.parent_path(), base).string();
+               std::get< 2>(row) = "Cpp Node";
+               std::get< 3>(row) = atoi(child.child_value("BuildOrder"));
+               std::get< 4>(row) = child.attribute("Include").value();
+               //std::get< 5>(row) =
+               std::get< 6>(row) = child.child_value("DependentOn");
+               //std::get< 7>(row) =
+               //std::get< 8>(row) =
+               std::get< 9>(row) = child.child_value("Form");
+               //std::get<10>(row) =
+               std::get<11>(row) = child.child_value("FormType");
+               std::get<12>(row) = child.child_value("DesignClass");
+               }
+            }
+         }
+      }
+   catch(std::exception& ex) {
+      std::cerr << ex.what() << std::endl;
+      }
+   }
 
 
 void TProcess::ParseAction() {
