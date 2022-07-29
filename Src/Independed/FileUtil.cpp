@@ -4,6 +4,7 @@
 
 #include "FileUtil.h"
 
+#include <iostream>
 #include <fstream>
 #include <iomanip>
 #include <sstream>

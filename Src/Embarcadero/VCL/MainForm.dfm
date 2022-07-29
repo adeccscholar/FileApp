@@ -3,7 +3,7 @@ object frmMain: TfrmMain
   Top = 0
   Caption = 'frmMain'
   ClientHeight = 1415
-  ClientWidth = 2248
+  ClientWidth = 2264
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -14,7 +14,7 @@ object frmMain: TfrmMain
   PixelsPerInch = 200
   TextHeight = 35
   object Panel1: TPanel
-    Left = 1921
+    Left = 1937
     Top = 0
     Width = 327
     Height = 1379
@@ -24,6 +24,7 @@ object frmMain: TfrmMain
     Margins.Bottom = 6
     Align = alRight
     TabOrder = 0
+    ExplicitLeft = 1921
     object btnCount: TButton
       Left = 12
       Top = 21
@@ -75,23 +76,11 @@ object frmMain: TfrmMain
       ItemHeight = 35
       TabOrder = 3
     end
-    object cbValues: TComboBox
-      Left = 34
-      Top = 493
-      Width = 256
-      Height = 43
-      Margins.Left = 6
-      Margins.Top = 6
-      Margins.Right = 6
-      Margins.Bottom = 6
-      TabOrder = 4
-      Text = 'cbValues'
-    end
   end
   object Panel2: TPanel
     Left = 0
     Top = 0
-    Width = 1921
+    Width = 1937
     Height = 1379
     Margins.Left = 6
     Margins.Top = 6
@@ -99,10 +88,11 @@ object frmMain: TfrmMain
     Margins.Bottom = 6
     Align = alClient
     TabOrder = 1
+    ExplicitWidth = 1921
     object Splitter1: TSplitter
       Left = 1
       Top = 1186
-      Width = 1919
+      Width = 1935
       Height = 6
       Cursor = crVSplit
       Margins.Left = 6
@@ -117,7 +107,7 @@ object frmMain: TfrmMain
     object Panel3: TPanel
       Left = 1
       Top = 1
-      Width = 1919
+      Width = 1935
       Height = 85
       Margins.Left = 6
       Margins.Top = 6
@@ -125,6 +115,7 @@ object frmMain: TfrmMain
       Margins.Bottom = 6
       Align = alTop
       TabOrder = 0
+      ExplicitWidth = 1919
       object lblDirectory: TLabel
         Left = 33
         Top = 25
@@ -152,7 +143,7 @@ object frmMain: TfrmMain
     object memError: TMemo
       Left = 1
       Top = 1192
-      Width = 1919
+      Width = 1935
       Height = 186
       Margins.Left = 6
       Margins.Top = 6
@@ -169,11 +160,12 @@ object frmMain: TfrmMain
       ParentFont = False
       ScrollBars = ssVertical
       TabOrder = 1
+      ExplicitWidth = 1919
     end
     object lvOutput: TListView
       Left = 1
       Top = 86
-      Width = 1919
+      Width = 1935
       Height = 1100
       Margins.Left = 6
       Margins.Top = 6
@@ -182,17 +174,19 @@ object frmMain: TfrmMain
       Align = alClient
       Columns = <>
       TabOrder = 2
+      ExplicitWidth = 1919
     end
   end
   object sbMain: TStatusBar
     Left = 0
     Top = 1379
-    Width = 2248
+    Width = 2264
     Height = 36
     Margins.Left = 6
     Margins.Top = 6
     Margins.Right = 6
     Margins.Bottom = 6
     Panels = <>
+    ExplicitWidth = 2248
   end
 end

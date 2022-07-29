@@ -166,9 +166,6 @@ size_t parse(string_type const& source, std::string const& del, container& list)
    std::vector<std::string> test = { ".cpp", ".h", ".dfm", ".fmx", ".cbproj", ".c", ".hpp" };
    std::copy(test.begin(), test.end(), std::ostream_iterator<std::string>(mys, "\n"));
 
-   std::ostream mys2(frm.GetAsStreamBuff<Narrow, EMyFrameworkType::combobox>("cbValues"));
-   std::copy(test.begin(), test.end(), std::ostream_iterator<std::string>(mys2, "\n"));
-
    std::clog << "program ready for action" << std::endl;
 
    }
@@ -205,7 +202,7 @@ void TProcess::ShowAction() {
       }
    }
 
-void Parse(fs::path const& base, fs::path const strFile, std::vector<tplData>& projects) {
+void Parse(fs::path const& base, fs::path const& strFile, std::vector<tplData>& projects) {
    try {
       pugi::xml_document doc;
       pugi::xml_parse_result result = doc.load_file(strFile.string().c_str(), pugi::parse_default | pugi::parse_fragment);
@@ -229,6 +226,23 @@ void Parse(fs::path const& base, fs::path const strFile, std::vector<tplData>& p
                //std::get<10>(row) =
                std::get<11>(row) = child.child_value("FormType");
                std::get<12>(row) = child.child_value("DesignClass");
+
+               if(!std::get<4>(row).empty())
+                  std::get< 5>(row) =CheckFileSize(fs::weakly_canonical(base / fs::path(std::get<1>(row)) / fs::path(std::get< 4>(row))));
+
+               if(!std::get<6>(row).empty())
+                  std::get< 7>(row) =CheckFileSize(fs::weakly_canonical(base / fs::path(std::get<1>(row)) / fs::path(std::get< 6>(row))));
+
+
+               if(!std::get<9>(row).empty()) {
+                  std::string strExt;
+                  if(std::get<11>(row).empty()) strExt = ".dfm";
+                  else strExt = std::string(".") + std::get<11>(row);
+                  std::get<8>(row) = ( fs::path(std::get<4>(row)).parent_path() / fs::path(std::get<4>(row)).stem()).string() + strExt;
+                  std::get<10>(row) =CheckFileSize(fs::weakly_canonical(base / fs::path(std::get<1>(row)) / fs::path(std::get<8>(row))));
+                  }
+
+               projects.emplace_back(std::move(row));
                }
             }
          }
@@ -240,8 +254,9 @@ void Parse(fs::path const& base, fs::path const strFile, std::vector<tplData>& p
 
 
 void TProcess::ParseAction() {
-   std::vector<fs::path> files;
-   std::set<std::string> extensions = { ".cpp", ".c", ".h", ".hpp", ".hxx", ".cbproj", ".dfm", ".fmx" };
+   std::vector<fs::path> project_files;
+   std::vector<tplData> projects;
+   std::set<std::string> extensions = { ".cbproj" };
 
    try {
       auto strPath = frm.Get<EMyFrameworkType::edit, std::string>("edtDirectory");
@@ -252,9 +267,15 @@ void TProcess::ParseAction() {
          frm.GetAsStream<Narrow, EMyFrameworkType::listview>(old_cout, "lvOutput", Project_Columns);
          std::chrono::milliseconds time;
          fs::path fsPath = *strPath;
-         auto ret = Call(time, Find, std::ref(files), std::cref(fsPath), std::cref(extensions), true);
-         std::cerr << ret << std::endl
+         auto ret = Call(time, Find, std::ref(project_files), std::cref(fsPath), std::cref(extensions), true);
+         std::clog << ret << " files found, "
                    << "procecced in " << std::setprecision(3) << time.count()/1000. << " sec" << std::endl;
+
+         for(auto file : project_files) Parse(fsPath, file, projects);
+         TMyDelimiter<Narrow> delimiter = { "", "\t", "\n" };
+         std::for_each(projects.begin(), projects.end(), [&delimiter](auto val) {
+            myTupleHlp<Narrow>::Output(std::cout, delimiter, val);
+            });
          }
       }
    catch(std::exception &ex) {
