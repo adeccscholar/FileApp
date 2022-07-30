@@ -4,3 +4,8 @@
 [submodule "pugiXML"]
 	path = pugiXML
 	url = https://github.com/zeux/pugixml.git
+[submodule "Nuklear"]
+
+	path = Nuklear
+
+	url = https://github.com/Immediate-Mode-UI/Nuklear.git
