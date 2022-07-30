@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Label="Globals">
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <ItemsProjectGuid>{cfc22cda-39c2-4d0d-a664-59ecb5f2f1a6}</ItemsProjectGuid>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(MSBuildThisFileDirectory)</AdditionalIncludeDirectories>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ProjectCapability Include="SourceItemsFromImports" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\adecc_Scholar\adecc_Scholar\MyConvert.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\adecc_Scholar\adecc_Scholar\MyForm.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\adecc_Scholar\adecc_Scholar\MyFramework_Selection.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\adecc_Scholar\adecc_Scholar\MyStdTypes.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\adecc_Scholar\adecc_Scholar\MyStream.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\adecc_Scholar\adecc_Scholar\MyTools.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\adecc_Scholar\adecc_Scholar\MyTupleUtils.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\adecc_Scholar\adecc_Scholar\MyType_Traits.h" />
+  </ItemGroup>
+</Project>

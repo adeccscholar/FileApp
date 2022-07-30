@@ -44,4 +44,5 @@ Win64
 Release
 Debug
 .vs
-
+**/tmp/*
+**/bin/*

@@ -1,0 +1,65 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Label="Globals">
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <ItemsProjectGuid>{aeb7a48f-1a29-40d2-9b23-90e6029f8c23}</ItemsProjectGuid>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(MSBuildThisFileDirectory)</AdditionalIncludeDirectories>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ProjectCapability Include="SourceItemsFromImports" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\Nuklear\src\nuklear.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\Nuklear\src\nuklear_internal.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\Nuklear\src\stb_rect_pack.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\Nuklear\src\stb_truetype.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\Nuklear\src\nuklear_9slice.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\Nuklear\src\nuklear_buffer.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\Nuklear\src\nuklear_button.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\Nuklear\src\nuklear_chart.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\Nuklear\src\nuklear_color.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\Nuklear\src\nuklear_color_picker.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\Nuklear\src\nuklear_combo.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\Nuklear\src\nuklear_context.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\Nuklear\src\nuklear_contextual.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\Nuklear\src\nuklear_draw.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\Nuklear\src\nuklear_edit.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\Nuklear\src\nuklear_font.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\Nuklear\src\nuklear_group.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\Nuklear\src\nuklear_image.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\Nuklear\src\nuklear_input.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\Nuklear\src\nuklear_layout.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\Nuklear\src\nuklear_list_view.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\Nuklear\src\nuklear_math.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\Nuklear\src\nuklear_menu.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\Nuklear\src\nuklear_page_element.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\Nuklear\src\nuklear_panel.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\Nuklear\src\nuklear_pool.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\Nuklear\src\nuklear_popup.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\Nuklear\src\nuklear_progress.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\Nuklear\src\nuklear_property.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\Nuklear\src\nuklear_scrollbar.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\Nuklear\src\nuklear_selectable.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\Nuklear\src\nuklear_slider.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\Nuklear\src\nuklear_string.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\Nuklear\src\nuklear_style.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\Nuklear\src\nuklear_table.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\Nuklear\src\nuklear_text.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\Nuklear\src\nuklear_text_editor.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\Nuklear\src\nuklear_toggle.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\Nuklear\src\nuklear_tooltip.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\Nuklear\src\nuklear_tree.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\Nuklear\src\nuklear_utf8.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\Nuklear\src\nuklear_util.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\Nuklear\src\nuklear_vertex.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\Nuklear\src\nuklear_widget.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\Nuklear\src\nuklear_window.c" />
+  </ItemGroup>
+</Project>
