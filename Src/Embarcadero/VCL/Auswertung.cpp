@@ -1,6 +1,6 @@
 //---------------------------------------------------------------------------
+#include <windows.h>
 #include <tchar.h>
-#include <minwindef.h>
 
 #if defined BUILD_WITH_VCL || BUILD_WITH_FMX
 

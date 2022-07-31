@@ -9,6 +9,10 @@
 #include <iomanip>
 #include <sstream>
 #include <functional> //std::bind
+#include <cctype> //std::tolower ohne locale
+#include <locale>
+#include <chrono>
+
 //---------------------------------------------------------------------------
 
 
@@ -142,12 +146,23 @@ void ShowFiles(std::ostream& out, std::vector<fs::path> const& files) {
               if(fs::is_directory(p))
                  std::cout << p << std::endl;
               else {
+				//kein VS oder VS mit C++20
+#if not defined _MSC_VER || _MSC_VER >= 1924
                  auto ftime = std::filesystem::last_write_time(p);
                  auto tt = decltype(ftime)::clock::to_time_t(ftime);
                  std::tm *loctime = std::localtime(&tt);
                  out << p << '\t'
                      << std::put_time(loctime, "%d.%m.%Y %T") << '\t'
                      << Convert_Size_KiloByte(fs::file_size(p)) << " KB" << std::endl;
+#else //_HAS_CXX17 VS2017 ohne C++20
+				  auto ftime = std::filesystem::last_write_time(p);
+				  time_t tt{ ftime.time_since_epoch().count() }; //to_time_t
+				  std::tm loctime;
+				  localtime_s(&loctime, &tt); //cl /permissive- = gcc -pedantic
+				  out << p << '\t'
+					  << std::put_time(&loctime, "%d.%m.%Y %T") << '\t'
+					  << Convert_Size_KiloByte(fs::file_size(p)) << " KB" << std::endl;
+#endif
                  }
               });
    }
