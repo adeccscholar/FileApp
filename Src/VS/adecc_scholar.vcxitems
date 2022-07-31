@@ -16,11 +16,13 @@
   <ItemGroup>
     <ClInclude Include="$(MSBuildThisFileDirectory)..\..\adecc_Scholar\adecc_Scholar\MyConvert.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)..\..\adecc_Scholar\adecc_Scholar\MyForm.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\adecc_Scholar\adecc_Scholar\MyFormList.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)..\..\adecc_Scholar\adecc_Scholar\MyFramework_Selection.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)..\..\adecc_Scholar\adecc_Scholar\MyStdTypes.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)..\..\adecc_Scholar\adecc_Scholar\MyStream.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)..\..\adecc_Scholar\adecc_Scholar\MyTools.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)..\..\adecc_Scholar\adecc_Scholar\MyTupleUtils.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)..\..\adecc_Scholar\adecc_Scholar\MyType_Traits.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\adecc_Scholar\adecc_Scholar\MyWait.h" />
   </ItemGroup>
 </Project>
