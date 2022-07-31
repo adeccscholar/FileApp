@@ -55,7 +55,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\Src\Independed\;$(ProjectDir)..\..\Nuklear\src\;$(ProjectDir)..\..\adecc_Scholar\adecc_Scholar\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\Src\Independed\;$(ProjectDir)..\..\Nuklear\src\;$(ProjectDir)..\..\adecc_Scholar\adecc_Scholar\;$(ProjectDir)..\..\\pugiXML\src\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -69,7 +69,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\Src\Independed\;$(ProjectDir)..\..\Nuklear\src\;$(ProjectDir)..\..\adecc_Scholar\adecc_Scholar\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\Src\Independed\;$(ProjectDir)..\..\Nuklear\src\;$(ProjectDir)..\..\adecc_Scholar\adecc_Scholar\;$(ProjectDir)..\..\\pugiXML\src\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

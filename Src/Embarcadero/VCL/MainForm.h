@@ -2,6 +2,9 @@
 
 #ifndef MainFormH
 #define MainFormH
+
+#if defined BUILD_WITH_VCL
+
 //---------------------------------------------------------------------------
 #include <System.Classes.hpp>
 #include <Vcl.Controls.hpp>
@@ -9,8 +12,13 @@
 #include <Vcl.Forms.hpp>
 #include <Vcl.ComCtrls.hpp>
 #include <Vcl.ExtCtrls.hpp>
+#endif
+
 //---------------------------------------------------------------------------
 #include "Process.h"
+
+//die zwei kennen TForm
+#if defined BUILD_WITH_VCL || defined BUILD_WITH_FMX
 
 class TfrmMain : public TForm
 {
@@ -40,4 +48,5 @@ public:		// Benutzer-Deklarationen
 //---------------------------------------------------------------------------
 extern PACKAGE TfrmMain *frmMain;
 //---------------------------------------------------------------------------
+#endif
 #endif

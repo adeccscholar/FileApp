@@ -1,5 +1,8 @@
+// Purpose: Connect Form-Events to Process.h::TProcess
 //---------------------------------------------------------------------------
 
+#if defined BUILD_WITH_VCL || defined BUILD_WITH_FMX
+// TObject/TComponent in System.Classes.hpp
 #include <vcl.h>
 #pragma hdrstop
 
@@ -31,3 +34,4 @@ void __fastcall TfrmMain::btnShowClick(TObject *Sender) {
    }
 //---------------------------------------------------------------------------
 
+#endif

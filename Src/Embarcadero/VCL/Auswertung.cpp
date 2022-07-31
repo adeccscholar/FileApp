@@ -1,11 +1,17 @@
 //---------------------------------------------------------------------------
+#include <tchar.h>
+#include <minwindef.h>
 
+#if defined BUILD_WITH_VCL || BUILD_WITH_FMX
 #include <vcl.h>
 #pragma hdrstop
-#include <tchar.h>
 //---------------------------------------------------------------------------
 USEFORM("MainForm.cpp", frmMain);
 //---------------------------------------------------------------------------
+#else
+#include <MyForm.h>
+#endif
+
 int WINAPI _tWinMain(HINSTANCE, HINSTANCE, LPTSTR, int)
 {
     try
