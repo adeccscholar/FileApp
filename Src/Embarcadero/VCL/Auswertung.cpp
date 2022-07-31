@@ -3,14 +3,18 @@
 #include <minwindef.h>
 
 #if defined BUILD_WITH_VCL || BUILD_WITH_FMX
-#include <vcl.h>
+
+#if defined BUILD_WITH_VCL
+	#include <vcl.h>
+#elif defined BUILD_WITH_FMX
+	#include <fmx.h>
+#endif
+
 #pragma hdrstop
 //---------------------------------------------------------------------------
 USEFORM("MainForm.cpp", frmMain);
 //---------------------------------------------------------------------------
-#else
-#include <MyForm.h>
-#endif
+
 
 int WINAPI _tWinMain(HINSTANCE, HINSTANCE, LPTSTR, int)
 {
@@ -39,3 +43,15 @@ int WINAPI _tWinMain(HINSTANCE, HINSTANCE, LPTSTR, int)
     return 0;
 }
 //---------------------------------------------------------------------------
+#elif defined BUILD_WITH_QT
+#include <QtWidgets/QApplication>
+//...QMainForm?
+#else
+#include <MyForm.h> //->MyFramework_Selection
+#include "MainForm.h" //->TProcess
+
+int WINAPI _tWinMain(HINSTANCE, HINSTANCE, LPTSTR, int)
+{
+	return 0;
+}
+#endif
