@@ -1,5 +1,16 @@
-//---------------------------------------------------------------------------
-
+/**
+ \file
+ \brief   file with the implementation of independent parts of the process logic for the FileApp program
+ \details This file contain the independent implementation of the processes in this application.
+          The core is the class TProcess.
+ \details By the use of the header-only library adecc Scholar the independence of the respective framework
+          is achieved.
+ <hr>
+ \author Volker Hillmann (adecc Systemhaus GmbH)
+ \date 22.07.2022 Create repository with this file
+ \version 0.1
+ \since Version 0.1
+*/
 #pragma hdrstop
 
 #include "Process.h"
@@ -26,6 +37,7 @@
 #include <functional>
 #include <exception>
 #include <fstream>
+
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
 
@@ -48,7 +60,7 @@ TStreamWrapper<Narrow> old_cerr(std::cerr);
 TStreamWrapper<Narrow> old_clog(std::clog);
 
 
-
+/// vector with captions and params for the project list
 std::vector<tplList<Narrow>> TProcess::Project_Columns {
     		  tplList<Narrow> { "project",      360, EMyAlignmentType::left },
               tplList<Narrow> { "path",         650, EMyAlignmentType::left },
@@ -64,18 +76,53 @@ std::vector<tplList<Narrow>> TProcess::Project_Columns {
 			  tplList<Narrow> { "formType",     150, EMyAlignmentType::left },
 			  tplList<Narrow> { "designclass",  250, EMyAlignmentType::left } };
 
+/// vector with captions and params for counting files
 std::vector<tplList<Narrow>> TProcess::Count_Columns {
     		  tplList<Narrow> { "files",        450, EMyAlignmentType::right },
               tplList<Narrow> { "directories",  450, EMyAlignmentType::right },
               tplList<Narrow> { "size",         600, EMyAlignmentType::right }
               };
 
+/// vector with captions and params for the file list
 std::vector<tplList<Narrow>> TProcess::File_Columns {
     		  tplList<Narrow> { "file",       1310, EMyAlignmentType::left },
               tplList<Narrow> { "time",        265, EMyAlignmentType::left },
               tplList<Narrow> { "size",        150, EMyAlignmentType::right } };
 
 
+constexpr int iMyData_Project  =  0; ///< constant for position of name of project in tplData
+constexpr int iMyData_Path     =  1; ///< constant for position of path to project in tplData
+constexpr int iMyData_Type     =  2; ///< constant for type of node in tplData 
+constexpr int iMyData_Order    =  3; ///< constant for build order in tplData
+constexpr int iMyData_CppFile  =  4; ///< constant for source file with relative path in tplData
+constexpr int iMyData_CppRows  =  5; ///< constant for rows in source file in tplData
+constexpr int iMyData_H_File   =  6; ///< constant for name with relative path of dependent header file
+constexpr int iMyData_H_Rows   =  7; ///< constant for rows in header file in tplData
+constexpr int iMyData_FrmFile  =  8; ///< constant for name with relative path of dependent form file in tplData
+constexpr int iMyData_FrmName  =  9; ///< constant for name of the formular in dependent form file in tplData
+constexpr int iMyData_FrmRows  = 10; ///< constant for rows in form file in tplData
+constexpr int iMyData_FrmType  = 11; ///< constant for type of form in dependent form file in tplData 
+constexpr int iMyData_FrmClass = 12; ///< constant for used design class in tplData
+
+
+/**
+  \brief tuple with all Data for projects in cbproj- files
+  \details list of parts
+<table><tr><th> ID <th> Constant <th> Type <th> Description</tr>
+<tr><td align="right"><b>  0 </b> <td align="left"> iMyData_Project  <td>std::string <td>name of the project file </tr>
+<tr><td align="right"><b>  1 </b> <td align="left"> iMyData_Path     <td>std::string <td>path to the project file </tr>
+<tr><td align="right"><b>  2 </b> <td align="left"> iMyData_Type     <td>std::string <td>type of node </tr>
+<tr><td align="right"><b>  3 </b> <td align="left"> iMyData_Order    <td>int         <td>build order </tr>
+<tr><td align="right"><b>  4 </b> <td align="left"> iMyData_CppFile  <td>std::string <td>source file with relative path </tr>
+<tr><td align="right"><b>  5 </b> <td align="left"> iMyData_CppRows  <td>size_t      <td>rows in source file </tr>
+<tr><td align="right"><b>  6 </b> <td align="left"> iMyData_H_File   <td>std::string <td>name of header file </tr>
+<tr><td align="right"><b>  7 </b> <td align="left"> iMyData_H_Rows   <td>size_t      <td>rows in header file </tr>
+<tr><td align="right"><b>  8 </b> <td align="left"> iMyData_FrmFile  <td>std::string <td>form file </tr>
+<tr><td align="right"><b>  9 </b> <td align="left"> iMyData_FrmName  <td>std::string <td>name of the formular </tr>
+<tr><td align="right"><b> 10 </b> <td align="left"> iMyData_FrmRows  <td>size_t      <td>rows in form file </tr>
+<tr><td align="right"><b> 11 </b> <td align="left"> iMyData_FrmType  <td>std::string <td>formtype </tr>
+<tr><td align="right"><b> 12 </b> <td align="left"> iMyData_FrmClass <td>std::string <td>design class </tr> </table>
+*/
 using tplData = std::tuple<std::string,  //  0 project
                            std::string,  //  1 path
                            std::string,  //  2 type
@@ -89,7 +136,6 @@ using tplData = std::tuple<std::string,  //  0 project
                            size_t,       // 10 rows
                            std::string,  // 11 formtype
                            std::string>; // 12 design class
-
 
 
 //----------------------------------------------------------------------------
@@ -168,6 +214,14 @@ size_t parse(string_type const& source, std::string const& del, container& list)
 
    std::clog << "program ready for action" << std::endl;
 
+   tasks.start();
+   tasks.add_task(100, [this]() { static int i = 0;
+                                  std::ostringstream os;
+                                  os << ++i << ". Test";
+                                  this->frm.Set<EMyFrameworkType::edit>("edtTest",  os.str());
+                                  return true;
+                                });
+
    }
 
 
@@ -200,9 +254,23 @@ void TProcess::ShowAction() {
       std::cerr << "error in function \"Show\": " << ex.what() << std::endl;
       std::clog << "error in function \"Show\"" << std::endl;
       }
+   tasks.stop();
    }
 
+/** \brief construction of filename with informations from tplData and base directory
+\tparam iFile Contant of int with the position of relative name in tplData
+\param base const reference of fs::path with basic path for tplData
+\param row const reference of tplData with informations for a information in project file
+\return fs::path with the absolute path to the requested file
+*/
+template <int iFile>
+fs::path ConstructFile(fs::path const& base, tplData const& row) {
+   return fs::weakly_canonical(base / fs::path(std::get<iMyData_Path>(row)) / fs::path(std::get<iFile>(row)));
+}
+
+/// method to parse a cbproj file for informations
 void Parse(fs::path const& base, fs::path const& strFile, std::vector<tplData>& projects) {
+
    try {
       pugi::xml_document doc;
       pugi::xml_parse_result result = doc.load_file(strFile.string().c_str(), pugi::parse_default | pugi::parse_fragment);
@@ -213,35 +281,35 @@ void Parse(fs::path const& base, fs::path const& strFile, std::vector<tplData>& 
             pugi::xml_node selNode = xpathNode.node();
             for(pugi::xml_node child = selNode.child("CppCompile"); child; child = child.next_sibling("CppCompile")) {
                tplData row;
-               std::get< 0>(row) = strFile.filename().string();
-               std::get< 1>(row) = fs::relative(strFile.parent_path(), base).string();
-               std::get< 2>(row) = "Cpp Node";
-               std::get< 3>(row) = atoi(child.child_value("BuildOrder"));
-               std::get< 4>(row) = child.attribute("Include").value();
-               //std::get< 5>(row) =
-               std::get< 6>(row) = child.child_value("DependentOn");
-               //std::get< 7>(row) =
-               //std::get< 8>(row) =
-               std::get< 9>(row) = child.child_value("Form");
-               //std::get<10>(row) =
-               std::get<11>(row) = child.child_value("FormType");
-               std::get<12>(row) = child.child_value("DesignClass");
+               std::get<iMyData_Project>(row)  = strFile.filename().string();
+               std::get<iMyData_Path>(row)     = fs::relative(strFile.parent_path(), base).string();
+               std::get<iMyData_Type>(row)     = "Cpp Node";
+               std::get<iMyData_Order>(row)    = atoi(child.child_value("BuildOrder"));
+               std::get<iMyData_CppFile>(row)  = child.attribute("Include").value();
+               std::get<iMyData_H_File>(row)   = child.child_value("DependentOn");
+               std::get<iMyData_FrmName>(row)  = child.child_value("Form");
+               std::get<iMyData_FrmType>(row)  = child.child_value("FormType");
+               std::get<iMyData_FrmClass>(row) = child.child_value("DesignClass");
 
-               if(!std::get<4>(row).empty())
-                  std::get< 5>(row) =CheckFileSize(fs::weakly_canonical(base / fs::path(std::get<1>(row)) / fs::path(std::get< 4>(row))));
+               if(!std::get<iMyData_CppFile>(row).empty())
+                  //std::get<iMyData_CppRows>(row) =CheckFileSize(fs::weakly_canonical(base / fs::path(std::get<iMyData_Path>(row)) / fs::path(std::get<iMyData_CppFile>(row))));
+                  std::get<iMyData_CppRows>(row) =CheckFileSize(ConstructFile<iMyData_CppFile>(base, row));
 
-               if(!std::get<6>(row).empty())
-                  std::get< 7>(row) =CheckFileSize(fs::weakly_canonical(base / fs::path(std::get<1>(row)) / fs::path(std::get< 6>(row))));
+               if(!std::get<iMyData_H_File>(row).empty())
+                  //std::get<iMyData_H_Rows>(row) =CheckFileSize(fs::weakly_canonical(base / fs::path(std::get<iMyData_Path>(row)) / fs::path(std::get<iMyData_H_File>(row))));
+                  std::get<iMyData_H_Rows>(row) =CheckFileSize(ConstructFile<iMyData_H_File>(base, row));
 
 
-               if(!std::get<9>(row).empty()) {
+               if(!std::get<iMyData_FrmName>(row).empty()) {
                   std::string strExt;
-                  if(std::get<11>(row).empty()) strExt = ".dfm";
-                  else strExt = std::string(".") + std::get<11>(row);
-                  std::get<8>(row) = ( fs::path(std::get<4>(row)).parent_path() / fs::path(std::get<4>(row)).stem()).string() + strExt;
-                  std::get<10>(row) =CheckFileSize(fs::weakly_canonical(base / fs::path(std::get<1>(row)) / fs::path(std::get<8>(row))));
+                  if(std::get<iMyData_FrmType>(row).empty()) strExt = ".dfm";   // eventual setting
+                  else strExt = std::string(".") + std::get<iMyData_FrmType>(row);
+                  std::get<iMyData_FrmFile>(row) = ( fs::path(std::get<iMyData_CppFile>(row)).parent_path() /
+                                                     fs::path(std::get<iMyData_CppFile>(row)).stem()).string() +
+                                                     strExt;
+                  //std::get<iMyData_FrmRows>(row) =CheckFileSize(fs::weakly_canonical(base / fs::path(std::get<iMyData_Path>(row)) / fs::path(std::get<iMyData_FrmFile>(row))));
+                  std::get<iMyData_FrmRows>(row) =CheckFileSize(ConstructFile<iMyData_FrmFile>(base, row));
                   }
-
                projects.emplace_back(std::move(row));
                }
             }
@@ -271,7 +339,19 @@ void TProcess::ParseAction() {
          std::clog << ret << " files found, "
                    << "procecced in " << std::setprecision(3) << time.count()/1000. << " sec" << std::endl;
 
+
          for(auto file : project_files) Parse(fsPath, file, projects);
+
+         std::sort(projects.begin(), projects.end(), [](auto lhs, auto rhs) {
+                      if(auto ret = std::get<iMyData_Project>(lhs).compare(std::get<iMyData_Project>(rhs)); ret == 0) {
+                         if(auto ret = std::get<iMyData_Path>(lhs).compare(std::get<iMyData_Path>(rhs)); ret == 0) {
+                            return std::get<iMyData_Order>(lhs) < std::get<iMyData_Order>(rhs);
+                            }
+                         else return ret < 0;
+                         }
+                      else return ret < 0;
+                      });
+
          TMyDelimiter<Narrow> delimiter = { "", "\t", "\n" };
          std::for_each(projects.begin(), projects.end(), [&delimiter](auto val) {
             myTupleHlp<Narrow>::Output(std::cout, delimiter, val);

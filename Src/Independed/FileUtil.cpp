@@ -86,7 +86,7 @@ Dir_Stats_Type Count(fs::path const& dir, bool boWithSub) {
 
 
 
-bool Find(std::vector<fs::path>& ret, fs::path const& dir, std::set<std::string> const& extensions, bool boWithSub) {
+size_t Find(std::vector<fs::path>& ret, fs::path const& dir, std::set<std::string> const& extensions, bool boWithSub) {
    static auto constexpr check_func = [](fs::path const& p) { return !fs::is_directory(p); };
    auto check_func2          = [&extensions](fs::path const& p) {
                                              return extensions.find(p.extension().string()) != extensions.end();
@@ -94,7 +94,7 @@ bool Find(std::vector<fs::path>& ret, fs::path const& dir, std::set<std::string>
    auto collect_func = [&ret](fs::path const& p) mutable { ret.emplace_back(p.string()); };
    auto call_func = std::bind(Find, std::ref(ret), std::placeholders::_1, std::cref(extensions), boWithSub);
 
-   if(Is_Hidden(dir)) return false;
+   if(Is_Hidden(dir)) return 0u;
    try {
       std::vector<fs::path> files;
       std::copy(fs::directory_iterator(dir), fs::directory_iterator(), std::back_inserter(files));
@@ -108,7 +108,7 @@ bool Find(std::vector<fs::path>& ret, fs::path const& dir, std::set<std::string>
    catch(std::exception& ex) {
       std::cerr << "error: " << ex.what() << std::endl;
       }
-   return true;
+   return ret.size();
    }
 
 

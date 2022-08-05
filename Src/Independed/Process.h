@@ -18,11 +18,40 @@
 #include <MyForm.h>
 #include <FileUtil.h>
 #include <locale>
+#include <thread>
+#include <atomic>
+
+
+class TMyTimer {
+    private:
+       std::atomic<bool> boActive = false;
+      // std::atomic<std::vector<std::function<void ()>>> tasks;
+    public:
+       TMyTimer() = default;
+       TMyTimer(TMyTimer const&) = delete;
+
+       template <typename func_type, typename... arguments>
+       void add_task(unsigned int interval, func_type func, arguments&&... args) {
+          std::function<typename std::result_of<func_type(arguments...)>::type()> task(std::bind(std::forward<func_type>(func), std::forward<arguments>(args)...));
+          //std::function<void ()> task(std::bind(std::forward<func_type>(func), std::forward<arguments>(args)...));
+          std::thread([this, interval, task]() {
+             while(this->boActive == true) {
+                std::this_thread::sleep_for(std::chrono::milliseconds(interval));
+                if(this->boActive) task();
+                }
+             }).detach();
+          }
+
+    void start() { boActive = true; }
+    void stop() { boActive = false; }
+    };
+
 
 
 class TProcess {
    private:
       TMyForm frm;
+      TMyTimer tasks;
       static std::locale myLoc;
       static std::vector<tplList<Narrow>> Project_Columns;
       static std::vector<tplList<Narrow>> Count_Columns;
