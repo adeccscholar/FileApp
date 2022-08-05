@@ -59,6 +59,12 @@ TStreamWrapper<Narrow> old_cout(std::cout);
 TStreamWrapper<Narrow> old_cerr(std::cerr);
 TStreamWrapper<Narrow> old_clog(std::clog);
 
+/// extensions for c++ builder project files
+std::set<std::string> TProcess::project_extensions = { ".cbproj" };
+std::set<std::string> TProcess::header_files = { ".h", ".hxx", ".hpp" };
+std::set<std::string> TProcess::form_files = { ".dfm", ".fmx" };
+
+
 
 /// vector with captions and params for the project list
 std::vector<tplList<Narrow>> TProcess::Project_Columns {
@@ -92,7 +98,7 @@ std::vector<tplList<Narrow>> TProcess::File_Columns {
 
 constexpr int iMyData_Project  =  0; ///< constant for position of name of project in tplData
 constexpr int iMyData_Path     =  1; ///< constant for position of path to project in tplData
-constexpr int iMyData_Type     =  2; ///< constant for type of node in tplData 
+constexpr int iMyData_Type     =  2; ///< constant for type of node in tplData
 constexpr int iMyData_Order    =  3; ///< constant for build order in tplData
 constexpr int iMyData_CppFile  =  4; ///< constant for source file with relative path in tplData
 constexpr int iMyData_CppRows  =  5; ///< constant for rows in source file in tplData
@@ -101,41 +107,9 @@ constexpr int iMyData_H_Rows   =  7; ///< constant for rows in header file in tp
 constexpr int iMyData_FrmFile  =  8; ///< constant for name with relative path of dependent form file in tplData
 constexpr int iMyData_FrmName  =  9; ///< constant for name of the formular in dependent form file in tplData
 constexpr int iMyData_FrmRows  = 10; ///< constant for rows in form file in tplData
-constexpr int iMyData_FrmType  = 11; ///< constant for type of form in dependent form file in tplData 
+constexpr int iMyData_FrmType  = 11; ///< constant for type of form in dependent form file in tplData
 constexpr int iMyData_FrmClass = 12; ///< constant for used design class in tplData
 
-
-/**
-  \brief tuple with all Data for projects in cbproj- files
-  \details list of parts
-<table><tr><th> ID <th> Constant <th> Type <th> Description</tr>
-<tr><td align="right"><b>  0 </b> <td align="left"> iMyData_Project  <td>std::string <td>name of the project file </tr>
-<tr><td align="right"><b>  1 </b> <td align="left"> iMyData_Path     <td>std::string <td>path to the project file </tr>
-<tr><td align="right"><b>  2 </b> <td align="left"> iMyData_Type     <td>std::string <td>type of node </tr>
-<tr><td align="right"><b>  3 </b> <td align="left"> iMyData_Order    <td>int         <td>build order </tr>
-<tr><td align="right"><b>  4 </b> <td align="left"> iMyData_CppFile  <td>std::string <td>source file with relative path </tr>
-<tr><td align="right"><b>  5 </b> <td align="left"> iMyData_CppRows  <td>size_t      <td>rows in source file </tr>
-<tr><td align="right"><b>  6 </b> <td align="left"> iMyData_H_File   <td>std::string <td>name of header file </tr>
-<tr><td align="right"><b>  7 </b> <td align="left"> iMyData_H_Rows   <td>size_t      <td>rows in header file </tr>
-<tr><td align="right"><b>  8 </b> <td align="left"> iMyData_FrmFile  <td>std::string <td>form file </tr>
-<tr><td align="right"><b>  9 </b> <td align="left"> iMyData_FrmName  <td>std::string <td>name of the formular </tr>
-<tr><td align="right"><b> 10 </b> <td align="left"> iMyData_FrmRows  <td>size_t      <td>rows in form file </tr>
-<tr><td align="right"><b> 11 </b> <td align="left"> iMyData_FrmType  <td>std::string <td>formtype </tr>
-<tr><td align="right"><b> 12 </b> <td align="left"> iMyData_FrmClass <td>std::string <td>design class </tr> </table>
-*/
-using tplData = std::tuple<std::string,  //  0 project
-                           std::string,  //  1 path
-                           std::string,  //  2 type
-                           int,          //  3 build order
-                           std::string,  //  4 cpp file
-                           size_t,       //  5 rows
-                           std::string,  //  6 h file
-                           size_t,       //  7 rows
-                           std::string,  //  8 form file
-                           std::string,  //  9 form name
-                           size_t,       // 10 rows
-                           std::string,  // 11 formtype
-                           std::string>; // 12 design class
 
 
 //----------------------------------------------------------------------------
@@ -214,14 +188,6 @@ size_t parse(string_type const& source, std::string const& del, container& list)
 
    std::clog << "program ready for action" << std::endl;
 
-   tasks.start();
-   tasks.add_task(100, [this]() { static int i = 0;
-                                  std::ostringstream os;
-                                  os << ++i << ". Test";
-                                  this->frm.Set<EMyFrameworkType::edit>("edtTest",  os.str());
-                                  return true;
-                                });
-
    }
 
 
@@ -254,7 +220,6 @@ void TProcess::ShowAction() {
       std::cerr << "error in function \"Show\": " << ex.what() << std::endl;
       std::clog << "error in function \"Show\"" << std::endl;
       }
-   tasks.stop();
    }
 
 /** \brief construction of filename with informations from tplData and base directory
@@ -269,7 +234,7 @@ fs::path ConstructFile(fs::path const& base, tplData const& row) {
 }
 
 /// method to parse a cbproj file for informations
-void Parse(fs::path const& base, fs::path const& strFile, std::vector<tplData>& projects) {
+void TProcess::Parse(fs::path const& base, fs::path const& strFile, std::vector<tplData>& projects) {
 
    try {
       pugi::xml_document doc;
@@ -292,11 +257,9 @@ void Parse(fs::path const& base, fs::path const& strFile, std::vector<tplData>& 
                std::get<iMyData_FrmClass>(row) = child.child_value("DesignClass");
 
                if(!std::get<iMyData_CppFile>(row).empty())
-                  //std::get<iMyData_CppRows>(row) =CheckFileSize(fs::weakly_canonical(base / fs::path(std::get<iMyData_Path>(row)) / fs::path(std::get<iMyData_CppFile>(row))));
                   std::get<iMyData_CppRows>(row) =CheckFileSize(ConstructFile<iMyData_CppFile>(base, row));
 
                if(!std::get<iMyData_H_File>(row).empty())
-                  //std::get<iMyData_H_Rows>(row) =CheckFileSize(fs::weakly_canonical(base / fs::path(std::get<iMyData_Path>(row)) / fs::path(std::get<iMyData_H_File>(row))));
                   std::get<iMyData_H_Rows>(row) =CheckFileSize(ConstructFile<iMyData_H_File>(base, row));
 
 
@@ -307,11 +270,56 @@ void Parse(fs::path const& base, fs::path const& strFile, std::vector<tplData>& 
                   std::get<iMyData_FrmFile>(row) = ( fs::path(std::get<iMyData_CppFile>(row)).parent_path() /
                                                      fs::path(std::get<iMyData_CppFile>(row)).stem()).string() +
                                                      strExt;
-                  //std::get<iMyData_FrmRows>(row) =CheckFileSize(fs::weakly_canonical(base / fs::path(std::get<iMyData_Path>(row)) / fs::path(std::get<iMyData_FrmFile>(row))));
                   std::get<iMyData_FrmRows>(row) =CheckFileSize(ConstructFile<iMyData_FrmFile>(base, row));
                   }
                projects.emplace_back(std::move(row));
                }
+
+            for(pugi::xml_node child = selNode.child("None"); child; child = child.next_sibling("None")) {
+               std::string strCurrentFile = child.attribute("Include").value();
+               std::string strCurrentExtension = fs::path(strCurrentFile).extension().string();
+               if(header_files.find(strCurrentExtension) != header_files.end()) {
+                  tplData row;
+                  if(auto it = std::find_if(projects.begin(), projects.end(), [strCurrentFile](auto const& val) {
+                        return strCurrentFile == std::get<iMyData_H_File>(val);
+                                     });it == projects.end()) {
+                     std::get<iMyData_Project>(row) = strFile.filename().string();
+                     std::get<iMyData_Path>(row)    = fs::relative(strFile.parent_path(), base).string();
+                     std::get<iMyData_Type>(row)    = "None Node";
+                     std::get<iMyData_Order>(row)   = atoi(child.child_value("BuildOrder"));
+                     std::get<iMyData_H_File>(row)  = strCurrentFile;
+
+                     if(!std::get<iMyData_H_File>(row).empty())
+                        std::get<iMyData_H_Rows>(row) =CheckFileSize(ConstructFile<iMyData_H_File>(base, row));
+
+                     projects.emplace_back(std::move(row));
+                     }
+                  }
+               }
+
+            for(pugi::xml_node child = selNode.child("FormResources"); child; child = child.next_sibling("FormResources")) {
+               std::string strCurrentFile = child.attribute("Include").value();
+               std::string strCurrentExtension = fs::path(strCurrentFile).extension().string();
+               if(form_files.find(strCurrentExtension) != form_files.end()) {
+                  tplData row;
+                  if(auto it = std::find_if(projects.begin(), projects.end(), [strCurrentFile](auto const& val) {
+                        return strCurrentFile == std::get<iMyData_FrmFile>(val);
+                                     });it == projects.end()) {
+                     std::get<iMyData_Project>(row) = strFile.filename().string();
+                     std::get<iMyData_Path>(row)    = fs::relative(strFile.parent_path(), base).string();
+                     std::get<iMyData_Type>(row)    = "Form Node";
+                     std::get<iMyData_Order>(row)   = atoi(child.child_value("BuildOrder"));
+                     std::get<iMyData_FrmFile>(row) = strCurrentFile;
+
+                     if(!std::get<iMyData_FrmFile>(row).empty())
+                        std::get<iMyData_FrmRows>(row) =CheckFileSize(ConstructFile<iMyData_FrmFile>(base, row));
+
+                     projects.emplace_back(std::move(row));
+                     }
+                  }
+               }
+
+
             }
          }
       }
@@ -324,7 +332,6 @@ void Parse(fs::path const& base, fs::path const& strFile, std::vector<tplData>& 
 void TProcess::ParseAction() {
    std::vector<fs::path> project_files;
    std::vector<tplData> projects;
-   std::set<std::string> extensions = { ".cbproj" };
 
    try {
       auto strPath = frm.Get<EMyFrameworkType::edit, std::string>("edtDirectory");
@@ -335,12 +342,25 @@ void TProcess::ParseAction() {
          frm.GetAsStream<Narrow, EMyFrameworkType::listview>(old_cout, "lvOutput", Project_Columns);
          std::chrono::milliseconds time;
          fs::path fsPath = *strPath;
-         auto ret = Call(time, Find, std::ref(project_files), std::cref(fsPath), std::cref(extensions), true);
+         auto ret = Call(time, Find, std::ref(project_files), std::cref(fsPath), std::cref(project_extensions), true);
          std::clog << ret << " files found, "
                    << "procecced in " << std::setprecision(3) << time.count()/1000. << " sec" << std::endl;
 
 
          for(auto file : project_files) Parse(fsPath, file, projects);
+
+         std::tuple<size_t, size_t, size_t> rows = { 0u, 0u, 0u };
+         std::for_each(projects.begin(), projects.end(), [&rows](auto const& val) {
+              std::get<0>(rows) += std::get<iMyData_CppRows>(val);
+              std::get<1>(rows) += std::get<iMyData_H_Rows>(val);
+              std::get<2>(rows) += std::get<iMyData_FrmRows>(val);
+              });
+         std::clog << project_files.size() << " project(s) processed, "
+                   << projects.size() << " item(s) found, "
+                   << mySum(rows) << " rows in files." << std::endl;
+         std:: cerr << "count of rows in files (cpp, h, form): ";
+         TMyDelimiter<Narrow> delimiter = { "(", ", ", ")\n" };
+         myTupleHlp<Narrow>::Output(std::cerr, delimiter, rows);
 
          std::sort(projects.begin(), projects.end(), [](auto lhs, auto rhs) {
                       if(auto ret = std::get<iMyData_Project>(lhs).compare(std::get<iMyData_Project>(rhs)); ret == 0) {
@@ -352,7 +372,7 @@ void TProcess::ParseAction() {
                       else return ret < 0;
                       });
 
-         TMyDelimiter<Narrow> delimiter = { "", "\t", "\n" };
+         delimiter = { "", "\t", "\n" };
          std::for_each(projects.begin(), projects.end(), [&delimiter](auto val) {
             myTupleHlp<Narrow>::Output(std::cout, delimiter, val);
             });
