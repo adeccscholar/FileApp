@@ -68,6 +68,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Embarcadero\VCL\MainForm.dfm" />
+    <None Include="..\Embarcadero\VCL\Auswertung.cbproj" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="nuk_header_only\nuklear_d3d11.hlsl">

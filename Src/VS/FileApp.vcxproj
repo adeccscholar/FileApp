@@ -98,7 +98,14 @@
     <ClInclude Include="nuk_header_only\nuklear_d3d11_vertex_shader.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\Embarcadero\VCL\MainForm.dfm" />
+    <None Include="..\Embarcadero\VCL\Auswertung.cbproj">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </None>
+    <None Include="..\Embarcadero\VCL\MainForm.dfm">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="nuk_header_only\nuklear_d3d11.hlsl">
