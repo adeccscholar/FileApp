@@ -24,7 +24,6 @@ object frmMain: TfrmMain
     Margins.Bottom = 6
     Align = alRight
     TabOrder = 0
-    ExplicitLeft = 1921
     object btnCount: TButton
       Left = 12
       Top = 21
@@ -76,6 +75,18 @@ object frmMain: TfrmMain
       ItemHeight = 35
       TabOrder = 3
     end
+    object edtTest: TEdit
+      Left = 12
+      Top = 827
+      Width = 291
+      Height = 43
+      Margins.Left = 6
+      Margins.Top = 6
+      Margins.Right = 6
+      Margins.Bottom = 6
+      TabOrder = 4
+      Text = 'edtTest'
+    end
   end
   object Panel2: TPanel
     Left = 0
@@ -88,7 +99,6 @@ object frmMain: TfrmMain
     Margins.Bottom = 6
     Align = alClient
     TabOrder = 1
-    ExplicitWidth = 1921
     object Splitter1: TSplitter
       Left = 1
       Top = 1186
@@ -115,7 +125,6 @@ object frmMain: TfrmMain
       Margins.Bottom = 6
       Align = alTop
       TabOrder = 0
-      ExplicitWidth = 1919
       object lblDirectory: TLabel
         Left = 33
         Top = 25
@@ -160,7 +169,6 @@ object frmMain: TfrmMain
       ParentFont = False
       ScrollBars = ssVertical
       TabOrder = 1
-      ExplicitWidth = 1919
     end
     object lvOutput: TListView
       Left = 1
@@ -174,7 +182,6 @@ object frmMain: TfrmMain
       Align = alClient
       Columns = <>
       TabOrder = 2
-      ExplicitWidth = 1919
     end
   end
   object sbMain: TStatusBar
@@ -187,6 +194,5 @@ object frmMain: TfrmMain
     Margins.Right = 6
     Margins.Bottom = 6
     Panels = <>
-    ExplicitWidth = 2248
   end
 end

@@ -21,7 +21,7 @@ Dir_Stats_Type operator ++ (Dir_Stats_Type& sum, int);
 std::uintmax_t Convert_Size_KiloByte(std::uintmax_t val);
 bool Is_Hidden(fs::path const& dir);
 Dir_Stats_Type Count(fs::path const& dir, bool boWithSub = false);
-bool Find(std::vector<fs::path>& ret, fs::path const& dir, std::set<std::string> const& extensions, bool boWithSub = false);
+size_t Find(std::vector<fs::path>& ret, fs::path const& dir, std::set<std::string> const& extensions, bool boWithSub = false);
 size_t CheckFileSize(fs::path const& strFile);
 void ShowFiles(std::ostream& out, std::vector<fs::path> const& files);
 
