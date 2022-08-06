@@ -13,6 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="nuk_headers">
+      <UniqueIdentifier>{6f47e565-35d0-4d10-b489-961dcecc9b3b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Independed\FileUtil.cpp">
@@ -25,6 +28,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\Embarcadero\VCL\MainForm.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="NukForm.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -41,8 +50,28 @@
     <ClInclude Include="..\Embarcadero\VCL\MainForm.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="NukForm.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="nuk_header_only\nuklear.h">
+      <Filter>nuk_headers</Filter>
+    </ClInclude>
+    <ClInclude Include="nuk_header_only\nuklear_d3d11.h">
+      <Filter>nuk_headers</Filter>
+    </ClInclude>
+    <ClInclude Include="nuk_header_only\nuklear_d3d11_pixel_shader.h">
+      <Filter>nuk_headers</Filter>
+    </ClInclude>
+    <ClInclude Include="nuk_header_only\nuklear_d3d11_vertex_shader.h">
+      <Filter>nuk_headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Embarcadero\VCL\MainForm.dfm" />
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="nuk_header_only\nuklear_d3d11.hlsl">
+      <Filter>nuk_headers</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>
