@@ -35,7 +35,6 @@
   </ImportGroup>
   <ImportGroup Label="Shared">
     <Import Project="adecc_scholar.vcxitems" Label="Shared" />
-    <Import Project="Nuklear.vcxitems" Label="Shared" />
     <Import Project="pugiXML.vcxitems" Label="Shared" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -55,11 +54,11 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\Src\Independed\;$(ProjectDir)..\..\Nuklear\src\;$(ProjectDir)..\..\adecc_Scholar\adecc_Scholar\;$(ProjectDir)..\..\\pugiXML\src\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>BUILD_WITH_NUKLEAR;_WIN64;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\Src\Independed\;$(ProjectDir)nuk_header_only\;$(ProjectDir)..\..\adecc_Scholar\adecc_Scholar\;$(ProjectDir)..\..\\pugiXML\src\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>BUILD_WITH_NUKLEAR;_WIN64;_MBCS;DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -70,8 +69,8 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\Src\Independed\;$(ProjectDir)..\..\Nuklear\src\;$(ProjectDir)..\..\adecc_Scholar\adecc_Scholar\;$(ProjectDir)..\..\\pugiXML\src\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>BUILD_WITH_NUKLEAR;_WIN64;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\Src\Independed\;$(ProjectDir)nuk_header_only\;$(ProjectDir)..\..\adecc_Scholar\adecc_Scholar\;$(ProjectDir)..\..\\pugiXML\src\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>BUILD_WITH_NUKLEAR;_WIN64;_MBCS;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -83,16 +82,32 @@
     <ClCompile Include="..\Embarcadero\VCL\Auswertung.cpp" />
     <ClCompile Include="..\Embarcadero\VCL\MainForm.cpp" />
     <ClCompile Include="..\Independed\FileUtil.cpp" />
-    <ClCompile Include="..\Independed\Process.cpp" />
+    <ClCompile Include="..\Independed\Process.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="NukForm.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Embarcadero\VCL\AuswertungPCH1.h" />
     <ClInclude Include="..\Embarcadero\VCL\MainForm.h" />
     <ClInclude Include="..\Independed\FileUtil.h" />
     <ClInclude Include="..\Independed\Process.h" />
+    <ClInclude Include="NukForm.h" />
+    <ClInclude Include="nuk_header_only\nuklear.h" />
+    <ClInclude Include="nuk_header_only\nuklear_d3d11.h" />
+    <ClInclude Include="nuk_header_only\nuklear_d3d11_pixel_shader.h" />
+    <ClInclude Include="nuk_header_only\nuklear_d3d11_vertex_shader.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Embarcadero\VCL\MainForm.dfm" />
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="nuk_header_only\nuklear_d3d11.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

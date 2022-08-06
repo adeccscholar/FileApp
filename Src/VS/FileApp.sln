@@ -7,17 +7,13 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FileApp", "FileApp.vcxproj"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "adecc_scholar", "adecc_scholar.vcxitems", "{CFC22CDA-39C2-4D0D-A664-59ECB5F2F1A6}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Nuklear", "Nuklear.vcxitems", "{AEB7A48F-1A29-40D2-9B23-90E6029F8C23}"
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "pugiXML", "pugiXML.vcxitems", "{C00CB013-4FC0-4B3B-A369-BD8BE2CF37B7}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
-		Nuklear.vcxitems*{aeb7a48f-1a29-40d2-9b23-90e6029f8c23}*SharedItemsImports = 9
 		pugiXML.vcxitems*{c00cb013-4fc0-4b3b-a369-bd8be2cf37b7}*SharedItemsImports = 9
 		adecc_scholar.vcxitems*{cfc22cda-39c2-4d0d-a664-59ecb5f2f1a6}*SharedItemsImports = 9
 		adecc_scholar.vcxitems*{fbc78833-7c18-4f5d-94ff-0dadb2cb5ac2}*SharedItemsImports = 4
-		Nuklear.vcxitems*{fbc78833-7c18-4f5d-94ff-0dadb2cb5ac2}*SharedItemsImports = 4
 		pugiXML.vcxitems*{fbc78833-7c18-4f5d-94ff-0dadb2cb5ac2}*SharedItemsImports = 4
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

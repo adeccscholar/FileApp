@@ -16,6 +16,8 @@
 #include "Process.h"
 
 #include "MyForm.h"
+#include "MyFormList.h"
+
 #include "MyStream.h"
 #include "MyType_Traits.h"
 #include "MyTupleUtils.h"
