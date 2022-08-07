@@ -41,8 +41,9 @@
 #include <fstream>
 
 //---------------------------------------------------------------------------
-#pragma package(smart_init)
-
+#ifndef _MSC_VER
+	#pragma package(smart_init)
+#endif
 // --------------------------------------------------------------------------
 // Prozesslogik
 
@@ -243,7 +244,7 @@ void TProcess::Parse(fs::path const& base, fs::path const& strFile, std::vector<
       pugi::xml_parse_result result = doc.load_file(strFile.string().c_str(), pugi::parse_default | pugi::parse_fragment);
       if(result) {
          pugi::xml_node root = doc.document_element();
-         pugi::xpath_node xpathNode = root.select_single_node("ItemGroup");
+         pugi::xpath_node xpathNode = root.select_node("ItemGroup");
          if(xpathNode) {
             pugi::xml_node selNode = xpathNode.node();
             for(pugi::xml_node child = selNode.child("CppCompile"); child; child = child.next_sibling("CppCompile")) {

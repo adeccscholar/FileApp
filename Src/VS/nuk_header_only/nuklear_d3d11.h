@@ -34,7 +34,7 @@ NK_API void nk_d3d11_shutdown(void);
 #ifdef NK_D3D11_IMPLEMENTATION
 
 #define WIN32_LEAN_AND_MEAN
-#define COBJMACROS
+
 #include <d3d11.h>
 
 #include <stddef.h>
