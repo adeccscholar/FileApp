@@ -174,13 +174,15 @@ int main(int argc, char** argv)
 	ctx = nk_d3d11_init(device, WINDOW_WIDTH, WINDOW_HEIGHT, MAX_VERTEX_BUFFER, MAX_INDEX_BUFFER);
 	/* Load Fonts: if none of these are loaded a default font will be used  */
 	/* Load Cursor: if you uncomment cursor loading please hide the cursor */
-	{struct nk_font_atlas *atlas;
-	nk_d3d11_font_stash_begin(&atlas);
-	//  ->Get Windows default Application-Font?
-	/*struct nk_font *droid = nk_font_atlas_add_from_file(atlas, "../../extra_font/DroidSans.ttf", 14, 0);*/
-	nk_d3d11_font_stash_end();
-	/*nk_style_load_all_cursors(ctx, atlas->cursors);*/
-	/*nk_style_set_font(ctx, &droid->handle)*/; }
+	{
+		struct nk_font_atlas *atlas;
+		nk_d3d11_font_stash_begin(&atlas);
+		//  ->Get Windows default Application-Font?
+		/*struct nk_font *droid = nk_font_atlas_add_from_file(atlas, "../../extra_font/DroidSans.ttf", 14, 0);*/
+		nk_d3d11_font_stash_end();
+		/*nk_style_load_all_cursors(ctx, atlas->cursors);*/
+		/*nk_style_set_font(ctx, &droid->handle)*/;
+	}
 
 	
 	bg.r = 0.10f, bg.g = 0.18f, bg.b = 0.24f, bg.a = 1.0f;
