@@ -199,10 +199,13 @@ int main(int argc, char** argv)
 		nk_input_end(ctx);
 
 		/* GUI */
-		if (nk_begin(ctx, "Demo", nk_rect(50, 50, 230, 250),
-			NK_WINDOW_BORDER | NK_WINDOW_MOVABLE | NK_WINDOW_SCALABLE |
-			NK_WINDOW_MINIMIZABLE | NK_WINDOW_TITLE))
+		if (nk_begin(ctx, "Demo", nk_rect(0, 0, d3d11.viewport.Width*0.8f, d3d11.viewport.Height*0.8f),
+			NK_WINDOW_BORDER | NK_WINDOW_TITLE
+			//| NK_WINDOW_SCALABLE | NK_WINDOW_MOVABLE //<- updates bounds.. fullscreenwindow
+			| NK_WINDOW_MINIMIZABLE
+			 ))
 		{
+			
 			enum { EASY, HARD };
 			static int op = EASY;
 			static int property = 20;
@@ -232,7 +235,15 @@ int main(int argc, char** argv)
 		}
 		nk_end(ctx);
 
-		
+		//TStatusBar
+		if (nk_begin(ctx, "StatusBar", nk_rect(0, d3d11.viewport.Height - 30, d3d11.viewport.Width, 30),
+			NK_WINDOW_BORDER | NK_WINDOW_NO_SCROLLBAR
+			))
+		{
+			nk_layout_row_dynamic(ctx, ctx->current->bounds.h, 1);
+			nk_label(ctx, "statustext", NK_TEXT_CENTERED);
+		}
+		nk_end(ctx);
 		/* Draw */
 		context->ClearRenderTargetView( rt_view, &bg.r);
 		context->OMSetRenderTargets( 1, &rt_view, NULL);
@@ -245,7 +256,7 @@ int main(int argc, char** argv)
 		}
 		else if (hr == DXGI_STATUS_OCCLUDED) {
 			/* window is not visible, so vsync won't work. Let's sleep a bit to reduce CPU usage */
-			Sleep(10);
+			Sleep(50);
 		}
 		assert(SUCCEEDED(hr));
 	}
