@@ -18,6 +18,7 @@
 #include <MyForm.h>
 #include <FileUtil.h>
 #include <locale>
+#include <vector>
 #include <thread>
 #include <atomic>
 
@@ -74,7 +75,9 @@ class TProcess {
       void CountAction();
 
    private:
-     void Parse(fs::path const& base, fs::path const& strFile, std::vector<tplData>& projects);
+     void Parse(fs::path const& fsPath, std::vector<fs::path>& project_files, std::vector<tplData>& projects);
+     void ParseProject(fs::path const& base, fs::path const& strFile, std::vector<tplData>& projects);
+     void ShowFiles(std::ostream& out, fs::path const& strBase, std::vector<fs::path> const& files);
 
 
 };

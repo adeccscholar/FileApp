@@ -18,7 +18,6 @@ void __fastcall TfrmMain::FormCreate(   TObject *Sender) {
    }
 //---------------------------------------------------------------------------
 void __fastcall TfrmMain::btnCountClick(TObject *Sender) {
-   TMyForm frm(this);
    proc.CountAction();
    }
 //---------------------------------------------------------------------------
@@ -30,4 +29,6 @@ void __fastcall TfrmMain::btnShowClick(TObject *Sender) {
    proc.ShowAction();
    }
 //---------------------------------------------------------------------------
+
+
 

@@ -19,6 +19,7 @@
 #include "MyStream.h"
 #include "MyType_Traits.h"
 #include "MyTupleUtils.h"
+#include "MyLogger.h"
 
 #include "FileUtil.h"
 
@@ -37,6 +38,7 @@
 #include <functional>
 #include <exception>
 #include <fstream>
+
 
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
@@ -191,11 +193,9 @@ size_t parse(string_type const& source, std::string const& del, container& list)
    }
 
 
-
 void TProcess::ShowAction() {
    try {
       std::vector<fs::path> files;
-      //std::set<std::string> extensions = { ".cpp", ".c", ".h", ".hpp", ".hxx", ".cbproj", ".dfm", ".fmx" };
       std::set<std::string> extensions;
       my_formlist<EMyFrameworkType::listbox, std::string> mylist(&frm, "lbValues");
       std::copy(mylist.begin(), mylist.end(), std::ostream_iterator<std::string>(std::cerr, "\n"));
@@ -210,10 +210,11 @@ void TProcess::ShowAction() {
          std::chrono::milliseconds time;
          fs::path fsPath = *strPath;
          auto ret = Call(time, Find, std::ref(files), std::cref(fsPath), std::cref(extensions), true);
-         std::clog << "function \"Find\" procecced in "
+
+         std::clog << " function \"Find\" procecced in "
                    << std::setprecision(3) << time.count()/1000. << " sec, "
                    << files.size() << " files found" << std::endl;
-         ShowFiles(std::cout, files);
+         ShowFiles(std::cout, fsPath, files);
          }
       }
    catch(std::exception& ex) {
@@ -233,136 +234,138 @@ fs::path ConstructFile(fs::path const& base, tplData const& row) {
    return fs::weakly_canonical(base / fs::path(std::get<iMyData_Path>(row)) / fs::path(std::get<iFile>(row)));
 }
 
-/// method to parse a cbproj file for informations
-void TProcess::Parse(fs::path const& base, fs::path const& strFile, std::vector<tplData>& projects) {
 
+/// method to parse a cbproj file for informations
+void TProcess::ParseProject(fs::path const& base, fs::path const& strFile, std::vector<tplData>& projects) {
+   auto xml_error = [&strFile](std::ostream& out, pugi::xml_parse_result result) {
+               out << "XML [" << strFile.string() << "] parsed with errors" << std::endl
+                   << "Error description: " << result.description() << std::endl
+                   << "Error offset: " << result.offset << std::endl;
+               };
    try {
       pugi::xml_document doc;
       pugi::xml_parse_result result = doc.load_file(strFile.string().c_str(), pugi::parse_default | pugi::parse_fragment);
-      if(result) {
-         pugi::xml_node root = doc.document_element();
-         pugi::xpath_node xpathNode = root.select_single_node("ItemGroup");
-         if(xpathNode) {
-            pugi::xml_node selNode = xpathNode.node();
-            for(pugi::xml_node child = selNode.child("CppCompile"); child; child = child.next_sibling("CppCompile")) {
-               tplData row;
-               std::get<iMyData_Project>(row)  = strFile.filename().string();
-               std::get<iMyData_Path>(row)     = fs::relative(strFile.parent_path(), base).string();
-               std::get<iMyData_Type>(row)     = "Cpp Node";
-               std::get<iMyData_Order>(row)    = atoi(child.child_value("BuildOrder"));
-               std::get<iMyData_CppFile>(row)  = child.attribute("Include").value();
-               std::get<iMyData_H_File>(row)   = child.child_value("DependentOn");
-               std::get<iMyData_FrmName>(row)  = child.child_value("Form");
-               std::get<iMyData_FrmType>(row)  = child.child_value("FormType");
-               std::get<iMyData_FrmClass>(row) = child.child_value("DesignClass");
+      if(!result) {
+         TMyLogger log(__func__, __FILE__, __LINE__);
+         xml_error(log.stream(), result);
+         log.except();
+         }
 
-               if(!std::get<iMyData_CppFile>(row).empty())
-                  std::get<iMyData_CppRows>(row) =CheckFileSize(ConstructFile<iMyData_CppFile>(base, row));
+      pugi::xml_node root = doc.document_element();
+      pugi::xpath_node xpathNode = root.select_single_node("ItemGroup");
+      if(!xpathNode) {
+         TMyLogger log(__func__, __FILE__, __LINE__);
+         log.stream() << "ItemGroup not found in file " << strFile.string();
+         log.except();
+         }
+      pugi::xml_node selNode = xpathNode.node();
+      for(pugi::xml_node child = selNode.child("CppCompile"); child; child = child.next_sibling("CppCompile")) {
+         tplData row;
+         std::get<iMyData_Project>(row)  = strFile.filename().string();
+         std::get<iMyData_Path>(row)     = fs::relative(strFile.parent_path(), base).string();
+         std::get<iMyData_Type>(row)     = "Cpp Node";
+         std::get<iMyData_Order>(row)    = atoi(child.child_value("BuildOrder"));
+         std::get<iMyData_CppFile>(row)  = child.attribute("Include").value();
+         std::get<iMyData_H_File>(row)   = child.child_value("DependentOn");
+         std::get<iMyData_FrmName>(row)  = child.child_value("Form");
+         std::get<iMyData_FrmType>(row)  = child.child_value("FormType");
+         std::get<iMyData_FrmClass>(row) = child.child_value("DesignClass");
+
+         if(!std::get<iMyData_CppFile>(row).empty())
+            std::get<iMyData_CppRows>(row) =CheckFileSize(ConstructFile<iMyData_CppFile>(base, row));
+
+         if(!std::get<iMyData_H_File>(row).empty())
+            std::get<iMyData_H_Rows>(row) =CheckFileSize(ConstructFile<iMyData_H_File>(base, row));
+
+         if(!std::get<iMyData_FrmName>(row).empty()) {
+            std::string strExt;
+            if(std::get<iMyData_FrmType>(row).empty()) strExt = ".dfm";   // eventual setting
+            else strExt = std::string(".") + std::get<iMyData_FrmType>(row);
+            std::get<iMyData_FrmFile>(row) = ( fs::path(std::get<iMyData_CppFile>(row)).parent_path() /
+                                               fs::path(std::get<iMyData_CppFile>(row)).stem()).string() +
+                                               strExt;
+            std::get<iMyData_FrmRows>(row) =CheckFileSize(ConstructFile<iMyData_FrmFile>(base, row));
+            }
+
+         projects.emplace_back(std::move(row));
+         }
+
+      for(pugi::xml_node child = selNode.child("None"); child; child = child.next_sibling("None")) {
+         std::string strCurrentFile = child.attribute("Include").value();
+         std::string strCurrentExtension = fs::path(strCurrentFile).extension().string();
+         if(header_files.find(strCurrentExtension) != header_files.end()) {
+            tplData row;
+            if(auto it = std::find_if(projects.begin(), projects.end(), [strCurrentFile](auto const& val) {
+                  return strCurrentFile == std::get<iMyData_H_File>(val);
+                               });it == projects.end()) {
+               std::get<iMyData_Project>(row) = strFile.filename().string();
+               std::get<iMyData_Path>(row)    = fs::relative(strFile.parent_path(), base).string();
+               std::get<iMyData_Type>(row)    = "None Node";
+               std::get<iMyData_Order>(row)   = atoi(child.child_value("BuildOrder"));
+               std::get<iMyData_H_File>(row)  = strCurrentFile;
 
                if(!std::get<iMyData_H_File>(row).empty())
                   std::get<iMyData_H_Rows>(row) =CheckFileSize(ConstructFile<iMyData_H_File>(base, row));
 
-
-               if(!std::get<iMyData_FrmName>(row).empty()) {
-                  std::string strExt;
-                  if(std::get<iMyData_FrmType>(row).empty()) strExt = ".dfm";   // eventual setting
-                  else strExt = std::string(".") + std::get<iMyData_FrmType>(row);
-                  std::get<iMyData_FrmFile>(row) = ( fs::path(std::get<iMyData_CppFile>(row)).parent_path() /
-                                                     fs::path(std::get<iMyData_CppFile>(row)).stem()).string() +
-                                                     strExt;
-                  std::get<iMyData_FrmRows>(row) =CheckFileSize(ConstructFile<iMyData_FrmFile>(base, row));
-                  }
                projects.emplace_back(std::move(row));
                }
-
-            for(pugi::xml_node child = selNode.child("None"); child; child = child.next_sibling("None")) {
-               std::string strCurrentFile = child.attribute("Include").value();
-               std::string strCurrentExtension = fs::path(strCurrentFile).extension().string();
-               if(header_files.find(strCurrentExtension) != header_files.end()) {
-                  tplData row;
-                  if(auto it = std::find_if(projects.begin(), projects.end(), [strCurrentFile](auto const& val) {
-                        return strCurrentFile == std::get<iMyData_H_File>(val);
-                                     });it == projects.end()) {
-                     std::get<iMyData_Project>(row) = strFile.filename().string();
-                     std::get<iMyData_Path>(row)    = fs::relative(strFile.parent_path(), base).string();
-                     std::get<iMyData_Type>(row)    = "None Node";
-                     std::get<iMyData_Order>(row)   = atoi(child.child_value("BuildOrder"));
-                     std::get<iMyData_H_File>(row)  = strCurrentFile;
-
-                     if(!std::get<iMyData_H_File>(row).empty())
-                        std::get<iMyData_H_Rows>(row) =CheckFileSize(ConstructFile<iMyData_H_File>(base, row));
-
-                     projects.emplace_back(std::move(row));
-                     }
-                  }
-               }
-
-            for(pugi::xml_node child = selNode.child("FormResources"); child; child = child.next_sibling("FormResources")) {
-               std::string strCurrentFile = child.attribute("Include").value();
-               std::string strCurrentExtension = fs::path(strCurrentFile).extension().string();
-               if(form_files.find(strCurrentExtension) != form_files.end()) {
-                  tplData row;
-                  if(auto it = std::find_if(projects.begin(), projects.end(), [strCurrentFile](auto const& val) {
-                        return strCurrentFile == std::get<iMyData_FrmFile>(val);
-                                     });it == projects.end()) {
-                     std::get<iMyData_Project>(row) = strFile.filename().string();
-                     std::get<iMyData_Path>(row)    = fs::relative(strFile.parent_path(), base).string();
-                     std::get<iMyData_Type>(row)    = "Form Node";
-                     std::get<iMyData_Order>(row)   = atoi(child.child_value("BuildOrder"));
-                     std::get<iMyData_FrmFile>(row) = strCurrentFile;
-
-                     if(!std::get<iMyData_FrmFile>(row).empty())
-                        std::get<iMyData_FrmRows>(row) =CheckFileSize(ConstructFile<iMyData_FrmFile>(base, row));
-
-                     projects.emplace_back(std::move(row));
-                     }
-                  }
-               }
-
-
             }
          }
+
+       for(pugi::xml_node child = selNode.child("FormResources"); child; child = child.next_sibling("FormResources")) {
+          std::string strCurrentFile = child.attribute("Include").value();
+          std::string strCurrentExtension = fs::path(strCurrentFile).extension().string();
+          if(form_files.find(strCurrentExtension) != form_files.end()) {
+             tplData row;
+             if(auto it = std::find_if(projects.begin(), projects.end(), [strCurrentFile](auto const& val) {
+                  return strCurrentFile == std::get<iMyData_FrmFile>(val);
+                               });it == projects.end()) {
+                std::get<iMyData_Project>(row) = strFile.filename().string();
+                std::get<iMyData_Path>(row)    = fs::relative(strFile.parent_path(), base).string();
+                std::get<iMyData_Type>(row)    = "Form Node";
+                std::get<iMyData_Order>(row)   = atoi(child.child_value("BuildOrder"));
+                std::get<iMyData_FrmFile>(row) = strCurrentFile;
+
+                if(!std::get<iMyData_FrmFile>(row).empty())
+                   std::get<iMyData_FrmRows>(row) =CheckFileSize(ConstructFile<iMyData_FrmFile>(base, row));
+
+                projects.emplace_back(std::move(row));
+                }
+             }
+          }
       }
    catch(std::exception& ex) {
       std::cerr << ex.what() << std::endl;
       }
    }
 
-
-void TProcess::ParseAction() {
-   std::vector<fs::path> project_files;
-   std::vector<tplData> projects;
-
-   try {
-      auto strPath = frm.Get<EMyFrameworkType::edit, std::string>("edtDirectory");
-      if(!strPath) {
-         throw std::runtime_error("directory to parse is empty, set a directory before call this function");
-         }
-      else {
-         frm.GetAsStream<Narrow, EMyFrameworkType::listview>(old_cout, "lvOutput", Project_Columns);
-         std::chrono::milliseconds time;
-         fs::path fsPath = *strPath;
-         auto ret = Call(time, Find, std::ref(project_files), std::cref(fsPath), std::cref(project_extensions), true);
-         std::clog << ret << " files found, "
-                   << "procecced in " << std::setprecision(3) << time.count()/1000. << " sec" << std::endl;
+void TProcess::Parse(fs::path const& fsPath, std::vector<fs::path>& project_files, std::vector<tplData>& projects) {
+   std::chrono::milliseconds time;
+   auto ret = Call(time, Find, std::ref(project_files), std::cref(fsPath), std::cref(project_extensions), true);
+   std::clog << ret << " files found, "
+             << "procecced in " << std::setprecision(3) << time.count()/1000. << " sec" << std::endl;
 
 
-         for(auto file : project_files) Parse(fsPath, file, projects);
+   for(auto file : project_files) ParseProject(fsPath, file, projects);
 
-         std::tuple<size_t, size_t, size_t> rows = { 0u, 0u, 0u };
-         std::for_each(projects.begin(), projects.end(), [&rows](auto const& val) {
+   std::tuple<size_t, size_t, size_t> rows = { 0u, 0u, 0u };
+   std::for_each(projects.begin(), projects.end(), [&rows](auto const& val) {
               std::get<0>(rows) += std::get<iMyData_CppRows>(val);
               std::get<1>(rows) += std::get<iMyData_H_Rows>(val);
               std::get<2>(rows) += std::get<iMyData_FrmRows>(val);
               });
-         std::clog << project_files.size() << " project(s) processed, "
-                   << projects.size() << " item(s) found, "
-                   << mySum(rows) << " rows in files." << std::endl;
-         std:: cerr << "count of rows in files (cpp, h, form): ";
-         TMyDelimiter<Narrow> delimiter = { "(", ", ", ")\n" };
-         myTupleHlp<Narrow>::Output(std::cerr, delimiter, rows);
 
-         std::sort(projects.begin(), projects.end(), [](auto lhs, auto rhs) {
+   TMyLogger log(__func__, __FILE__, __LINE__);
+   log.stream() << project_files.size() << " project(s) processed, "
+                << projects.size() << " item(s) found, "
+                << mySum(rows) << " rows in files.";
+   log.Write(std::clog);
+
+   std:: cerr << "count of rows in files (cpp, h, form): ";
+   TMyDelimiter<Narrow> delimiter = { "(", ", ", ")\n" };
+   myTupleHlp<Narrow>::Output(std::cerr, delimiter, rows);
+
+   std::sort(projects.begin(), projects.end(), [](auto lhs, auto rhs) {
                       if(auto ret = std::get<iMyData_Project>(lhs).compare(std::get<iMyData_Project>(rhs)); ret == 0) {
                          if(auto ret = std::get<iMyData_Path>(lhs).compare(std::get<iMyData_Path>(rhs)); ret == 0) {
                             return std::get<iMyData_Order>(lhs) < std::get<iMyData_Order>(rhs);
@@ -372,11 +375,26 @@ void TProcess::ParseAction() {
                       else return ret < 0;
                       });
 
-         delimiter = { "", "\t", "\n" };
-         std::for_each(projects.begin(), projects.end(), [&delimiter](auto val) {
-            myTupleHlp<Narrow>::Output(std::cout, delimiter, val);
-            });
+   delimiter = { "", "\t", "\n" };
+   std::for_each(projects.begin(), projects.end(), [&delimiter](auto val) {
+          myTupleHlp<Narrow>::Output(std::cout, delimiter, val);
+          });
+   }
+
+void TProcess::ParseAction() {
+   std::vector<fs::path> project_files;
+   std::vector<tplData> projects;
+
+   try {
+      auto strPath = frm.Get<EMyFrameworkType::edit, std::string>("edtDirectory");
+      if(!strPath) {
+         TMyLogger log(__func__, __FILE__, __LINE__);
+         log.stream() << "directory to parse is empty, set a directory before call this function";
+         log.except();
          }
+
+      frm.GetAsStream<Narrow, EMyFrameworkType::listview>(old_cout, "lvOutput", Project_Columns);
+      Parse(*strPath, project_files, projects);
       }
    catch(std::exception &ex) {
       std::cerr << "error in function \"Parse\": " << ex.what() << std::endl;
@@ -406,4 +424,21 @@ void TProcess::CountAction() {
       std::cerr << "error in function \"Count\": " << ex.what() << std::endl;
       std::clog << "error in function \"Count\"" << std::endl;
       }
+   }
+
+// C++20 format for date time, C++Builder only C++17
+void TProcess::ShowFiles(std::ostream& out, fs::path const& strBase, std::vector<fs::path> const& files) {
+   std::for_each(files.begin(), files.end(), [&out, strBase](auto p) {
+              if(fs::is_directory(p)) {
+                 std::cout << fs::relative(p, strBase) << std::endl;
+                 }
+              else {
+                 auto ftime = std::filesystem::last_write_time(p);
+                 auto tt = decltype(ftime)::clock::to_time_t(ftime);
+                 std::tm *loctime = std::localtime(&tt);
+                 out << fs::relative(p, strBase) << '\t'
+                     << std::put_time(loctime, "%d.%m.%Y %T") << '\t'
+                     << Convert_Size_KiloByte(fs::file_size(p)) << " KB" << std::endl;
+                 }
+              });
    }

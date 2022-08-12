@@ -135,21 +135,7 @@ size_t CheckFileSize(fs::path const& strFile) {
    }
 
 
-// C++20 format for date time, C++Builder only C++17
-void ShowFiles(std::ostream& out, std::vector<fs::path> const& files) {
-   std::for_each(files.begin(), files.end(), [&out](auto p) {
-              if(fs::is_directory(p))
-                 std::cout << p << std::endl;
-              else {
-                 auto ftime = std::filesystem::last_write_time(p);
-                 auto tt = decltype(ftime)::clock::to_time_t(ftime);
-                 std::tm *loctime = std::localtime(&tt);
-                 out << p << '\t'
-                     << std::put_time(loctime, "%d.%m.%Y %T") << '\t'
-                     << Convert_Size_KiloByte(fs::file_size(p)) << " KB" << std::endl;
-                 }
-              });
-   }
+
 
 
 
