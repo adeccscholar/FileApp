@@ -2,12 +2,13 @@
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include <tchar.h>
-#include <d3d11.h>
 #include <stdio.h>
 #include <string.h>
 #include <limits.h>
 #include <time.h>
 
+
+#include <d3d11.h>
 extern "C" {
 	_declspec(dllexport) unsigned long NvOptimusEnablement = 0x00000001;
 	_declspec(dllexport) int AmdPowerXpressRequestHighPerformance = 1;
