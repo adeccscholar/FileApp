@@ -140,42 +140,5 @@ size_t CheckFileSize(fs::path const& strFile) {
    }
 
 
-#if not defined _MSC_VER || _MSC_VER >= 1924 //borland, oder vs das c++20 kennt
-// C++20 format for date time, C++Builder only C++17
-void ShowFiles(std::ostream& out, std::vector<fs::path> const& files) {
-	std::for_each(files.begin(), files.end(), [&out](auto p) {
-		if (fs::is_directory(p))
-			std::cout << p << std::endl;
-		else {
-			auto ftime = std::filesystem::last_write_time(p);
-			auto tt = decltype(ftime)::clock::to_time_t(ftime);
-			std::tm *loctime = std::localtime(&tt);
-			out << p << '\t'
-				<< std::put_time(loctime, "%d.%m.%Y %T") << '\t'
-				<< Convert_Size_KiloByte(fs::file_size(p)) << " KB" << std::endl;
-		}
-		});
-}
-#endif
-		 
-#if _MSC_VER<1924 //_HAS_CXX17 VS2017 ohne C++20 -> to_time_t anders handhaben
-// C++20 format for date time, C++Builder only C++17
-void ShowFiles(std::ostream& out, std::vector<fs::path> const& files) {
-	std::for_each(files.begin(), files.end(), [&out](auto p) {
-		if (fs::is_directory(p))
-			std::cout << p << std::endl;
-		else {
-			auto ftime = std::filesystem::last_write_time(p);
-			time_t tt{ ftime.time_since_epoch().count() }; //to_time_t
-			std::tm loctime;
-			localtime_s(&loctime, &tt); //cl /permissive- = gcc -pedantic
-			out << p << '\t'
-				<< std::put_time(&loctime, "%d.%m.%Y %T") << '\t'
-				<< Convert_Size_KiloByte(fs::file_size(p)) << " KB" << std::endl;
-		}
-		});
-}
-#endif
-
 
 

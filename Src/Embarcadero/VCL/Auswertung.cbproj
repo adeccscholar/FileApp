@@ -65,8 +65,8 @@
         <UWP_CppLogo44>$(BDS)\bin\Artwork\Windows\UWP\cppreg_UwpDefault_44.png</UWP_CppLogo44>
         <UWP_CppLogo150>$(BDS)\bin\Artwork\Windows\UWP\cppreg_UwpDefault_150.png</UWP_CppLogo150>
         <SanitizedProjectName>Auswertung</SanitizedProjectName>
-        <IncludePath>..\..\Independed\;..\..\..\pugiXML\src\;..\..\..\adecc_Scholar\adecc_Scholar\;$(IncludePath)</IncludePath>
-        <ILINK_LibraryPath>..\..\Independed\;..\..\..\pugiXML\src\;..\..\..\adecc_Scholar\adecc_Scholar\;$(ILINK_LibraryPath)</ILINK_LibraryPath>
+        <IncludePath>..\..\..\..\adecc_Scholar\adecc_Scholar\;..\..\Independed\;..\..\..\pugiXML\src\;..\..\..\adecc_Scholar\adecc_Scholar\;$(IncludePath)</IncludePath>
+        <ILINK_LibraryPath>..\..\..\..\adecc_Scholar\adecc_Scholar\;..\..\Independed\;..\..\..\pugiXML\src\;..\..\..\adecc_Scholar\adecc_Scholar\;$(ILINK_LibraryPath)</ILINK_LibraryPath>
         <Defines>BUILD_WITH_VCL;$(Defines)</Defines>
         <VerInfo_Locale>1031</VerInfo_Locale>
         <VerInfo_Keys>CompanyName=;FileDescription=$(MSBuildProjectName);FileVersion=1.0.0.0;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProgramID=com.embarcadero.$(MSBuildProjectName);ProductName=$(MSBuildProjectName);ProductVersion=1.0.0.0;Comments=</VerInfo_Keys>
@@ -129,6 +129,10 @@
         <BCC_UseClassicCompiler>false</BCC_UseClassicCompiler>
     </PropertyGroup>
     <ItemGroup>
+        <None Include="..\..\..\..\adecc_Scholar\adecc_Scholar\MyLogger.h">
+            <VirtualFolder>{1678E52C-10A8-44B6-A08D-F311B162962A}</VirtualFolder>
+            <BuildOrder>16</BuildOrder>
+        </None>
         <None Include="..\..\..\adecc_Scholar\adecc_Scholar\MyConvert.h">
             <VirtualFolder>{1678E52C-10A8-44B6-A08D-F311B162962A}</VirtualFolder>
             <BuildOrder>3</BuildOrder>

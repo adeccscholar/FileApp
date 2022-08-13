@@ -18,6 +18,7 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)..\..\adecc_Scholar\adecc_Scholar\MyForm.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)..\..\adecc_Scholar\adecc_Scholar\MyFormList.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)..\..\adecc_Scholar\adecc_Scholar\MyFramework_Selection.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\adecc_Scholar\adecc_Scholar\MyLogger.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)..\..\adecc_Scholar\adecc_Scholar\MyStdTypes.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)..\..\adecc_Scholar\adecc_Scholar\MyStream.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)..\..\adecc_Scholar\adecc_Scholar\MyTools.h" />
