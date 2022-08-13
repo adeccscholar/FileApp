@@ -21,7 +21,6 @@ void __fastcall TfrmMain::FormCreate(   TObject *Sender) {
    }
 //---------------------------------------------------------------------------
 void __fastcall TfrmMain::btnCountClick(TObject *Sender) {
-   TMyForm frm(this);
    proc.CountAction();
    }
 //---------------------------------------------------------------------------
