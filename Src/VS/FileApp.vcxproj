@@ -99,6 +99,7 @@
     <ClInclude Include="nuk_header_only\nuklear_d3d11.h" />
     <ClInclude Include="nuk_header_only\nuklear_d3d11_pixel_shader.h" />
     <ClInclude Include="nuk_header_only\nuklear_d3d11_vertex_shader.h" />
+    <ClInclude Include="nuk_header_only\nuk_controls.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Embarcadero\VCL\Auswertung.cbproj">

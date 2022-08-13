@@ -65,6 +65,9 @@
     <ClInclude Include="nuk_header_only\nuklear_d3d11_vertex_shader.h">
       <Filter>nuk_headers</Filter>
     </ClInclude>
+    <ClInclude Include="nuk_header_only\nuk_controls.h">
+      <Filter>nuk_headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Embarcadero\VCL\MainForm.dfm" />
