@@ -28,7 +28,7 @@ extern "C" {
 
 #include <MyStdTypes.h>
 #include <MyFramework_Selection.h>
-
+#define NK_D3D11_IMPLEMENTATION
 #include <nuklear_d3d11.h>
 
 //#include <MyForm.h> //->MyFramework_Selection

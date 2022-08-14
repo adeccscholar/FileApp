@@ -6,57 +6,56 @@
 
 namespace nk
 {
-
-	struct TMemo
+	class IComponent
 	{
+	public:
 		std::string name;
+		virtual ~IComponent() = default;
+	};
+	struct TMemo : public IComponent
+	{
 		std::vector<std::string> data;
 	};
 
-	struct TLabel
+	struct TLabel : public IComponent
 	{
-		std::string name;
 		std::string text;
 	};
 
-	struct TEdit
+	struct TEdit : public IComponent
 	{
-		std::string name;
 		std::string text;
 	};
 
-	struct TCombobox
+	struct TCombobox : public IComponent
 	{
-		std::string name;
 		std::string text;
 		std::vector<std::string> items;
+		int itemindex = -1;
 		size_t count() const { return items.size(); }
 	};
 
-	struct TListbox
+	struct TListbox : public IComponent
 	{
-		std::string name;
 		std::vector<std::string> items;
+		int itemindex = -1;
 		size_t count() const { return items.size(); }
 	};
 
-	struct TCheckbox
+	struct TCheckbox : public IComponent
 	{
-		std::string name;
 		std::string text;
 		int checkstate = 0; //tristate?
 	};
 
-	struct TButton
+	struct TButton : public IComponent
 	{
-		std::string name;
 		std::string text;
 		std::function<void()> onClick = nullptr;
 	};
 
-	struct TStatusBar
+	struct TStatusBar : public IComponent
 	{
-		std::string name;
 		std::string text;
 		int& window_height;
 		int& window_width;
@@ -84,9 +83,8 @@ namespace nk
 		}
 	};
 
-	struct TGroupBox
+	struct TGroupBox : public IComponent
 	{
-		std::string name;
 		std::string title;
 		std::vector<std::function<void(nk_context*)>> component_funcs;
 		void draw(nk_context* ctx)
@@ -102,7 +100,8 @@ namespace nk
 		}
 	};
 
-	struct TGrid {
+	struct TGrid : public IComponent
+	{
 		struct THeadItem {
 			std::string caption;
 			int width = 10;
@@ -126,5 +125,21 @@ namespace nk
 		}
 	};
 
+	struct NKForm
+	{
+		std::string name;
+		std::string title;
+		std::vector<IComponent*> fields;
+		IComponent* FindComponent(std::string const& strField)
+		{
+			for (IComponent* c : fields)
+			{
+				if (!c) { continue; }
+				if (c->name != strField) { continue; }
+				return c;
+			}
+			return nullptr;
+		}
+	};
 }
 #endif
