@@ -24,20 +24,16 @@ extern "C" {
 #define MAX_VERTEX_BUFFER 512 * 1024
 #define MAX_INDEX_BUFFER 128 * 1024
 
-#define NK_INCLUDE_FIXED_TYPES
-//#define NK_INCLUDE_STANDARD_IO
-#define NK_INCLUDE_STANDARD_VARARGS
-#define NK_INCLUDE_DEFAULT_ALLOCATOR
-#define NK_INCLUDE_VERTEX_BUFFER_OUTPUT
-#define NK_INCLUDE_FONT_BAKING
-#define NK_INCLUDE_DEFAULT_FONT
-#define NK_IMPLEMENTATION
-#define NK_D3D11_IMPLEMENTATION
-#include "nuklear.h"
-#include "nuklear_d3d11.h"
+
+
+#include <MyStdTypes.h>
+#include <MyFramework_Selection.h>
+
+#include <nuklear_d3d11.h>
 
 //#include <MyForm.h> //->MyFramework_Selection
 #include "NukForm.h" //->TProcess, ->nuklear
+#include "MyStream.h"
 
 /* ===============================================================
  *
