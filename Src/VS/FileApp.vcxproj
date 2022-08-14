@@ -82,10 +82,7 @@
     <ClCompile Include="..\Embarcadero\VCL\Auswertung.cpp" />
     <ClCompile Include="..\Embarcadero\VCL\MainForm.cpp" />
     <ClCompile Include="..\Independed\FileUtil.cpp" />
-    <ClCompile Include="..\Independed\Process.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </ClCompile>
+    <ClCompile Include="..\Independed\Process.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="NukForm.cpp" />
   </ItemGroup>
