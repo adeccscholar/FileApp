@@ -28,6 +28,17 @@ extern "C" {
 
 #include <MyStdTypes.h>
 #include <MyFramework_Selection.h>
+
+#define NK_INCLUDE_FIXED_TYPES
+//#define NK_INCLUDE_STANDARD_IO
+#define NK_INCLUDE_STANDARD_VARARGS
+#define NK_INCLUDE_DEFAULT_ALLOCATOR
+#define NK_INCLUDE_VERTEX_BUFFER_OUTPUT
+#define NK_INCLUDE_FONT_BAKING
+#define NK_INCLUDE_DEFAULT_FONT
+#define NK_IMPLEMENTATION
+#include <nuklear.h>
+#include "nuk_controls.h"
 #define NK_D3D11_IMPLEMENTATION
 #include <nuklear_d3d11.h>
 
@@ -198,7 +209,7 @@ int main(int argc, char** argv)
 		nk_input_end(ctx);
 
 		/* GUI */
-		if (nk_begin(ctx, "Demo", nk_rect(0, 0, d3d11.viewport.Width*0.8f, d3d11.viewport.Height*0.8f),
+		if (nk_begin(ctx, "Demo", nk_rectf(0, 0, d3d11.viewport.Width*0.8f, d3d11.viewport.Height*0.8f),
 			NK_WINDOW_BORDER | NK_WINDOW_TITLE
 			//| NK_WINDOW_SCALABLE | NK_WINDOW_MOVABLE //<- updates bounds.. fullscreenwindow
 			| NK_WINDOW_MINIMIZABLE
@@ -235,7 +246,7 @@ int main(int argc, char** argv)
 		nk_end(ctx);
 
 		//TStatusBar
-		if (nk_begin(ctx, "StatusBar", nk_rect(0, d3d11.viewport.Height - 30, d3d11.viewport.Width, 30),
+		if (nk_begin(ctx, "StatusBar", nk_rectf(0, d3d11.viewport.Height - 30, d3d11.viewport.Width, 30),
 			NK_WINDOW_BORDER | NK_WINDOW_NO_SCROLLBAR
 			))
 		{

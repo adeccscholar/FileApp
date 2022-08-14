@@ -185,7 +185,7 @@
 /// struct nk_context ctx;
 ///
 /// nk_init_fixed(&ctx, calloc(1, MAX_MEMORY), MAX_MEMORY, &font);
-/// if (nk_begin(&ctx, "Show", nk_rect(50, 50, 220, 220),
+/// if (nk_begin(&ctx, "Show", nk_rectf(50, 50, 220, 220),
 ///     NK_WINDOW_BORDER|NK_WINDOW_MOVABLE|NK_WINDOW_CLOSABLE)) {
 ///     // fixed widget pixel width
 ///     nk_layout_row_static(&ctx, 30, 80, 1);
@@ -477,7 +477,7 @@ struct nk_color {nk_byte r,g,b,a;};
 struct nk_colorf {float r,g,b,a;};
 struct nk_vec2 {float x,y;};
 struct nk_vec2i {short x, y;};
-struct nk_rect {float x,y,w,h;};
+#include "nk_rect.h"
 struct nk_recti {short x,y,w,h;};
 typedef char nk_glyph[NK_UTF_SIZE];
 typedef union {void *ptr; int id;} nk_handle;
@@ -2230,17 +2230,17 @@ NK_API void nk_window_show_if(struct nk_context*, const char *name, enum nk_show
 ///     if (nk_begin_xxx(...) {
 ///         // static row with height: 500 (you can set column count to INT_MAX if you don't want to be bothered)
 ///         nk_layout_space_begin(ctx, NK_STATIC, 500, INT_MAX);
-///         nk_layout_space_push(ctx, nk_rect(0,0,150,200));
+///         nk_layout_space_push(ctx, nk_rectf(0,0,150,200));
 ///         nk_widget(...);
-///         nk_layout_space_push(ctx, nk_rect(200,200,100,200));
+///         nk_layout_space_push(ctx, nk_rectf(200,200,100,200));
 ///         nk_widget(...);
 ///         nk_layout_space_end(ctx);
 ///         //
 ///         // dynamic row with height: 500 (you can set column count to INT_MAX if you don't want to be bothered)
 ///         nk_layout_space_begin(ctx, NK_DYNAMIC, 500, INT_MAX);
-///         nk_layout_space_push(ctx, nk_rect(0.5,0.5,0.1,0.1));
+///         nk_layout_space_push(ctx, nk_rectf(0.5,0.5,0.1,0.1));
 ///         nk_widget(...);
-///         nk_layout_space_push(ctx, nk_rect(0.7,0.6,0.1,0.1));
+///         nk_layout_space_push(ctx, nk_rectf(0.7,0.6,0.1,0.1));
 ///         nk_widget(...);
 ///     }
 ///     nk_end(...);
@@ -3104,19 +3104,9 @@ NK_API void nk_spacing(struct nk_context*, int cols);
  *                                  TEXT
  *
  * ============================================================================= */
-enum nk_text_align {
-    NK_TEXT_ALIGN_LEFT        = 0x01,
-    NK_TEXT_ALIGN_CENTERED    = 0x02,
-    NK_TEXT_ALIGN_RIGHT       = 0x04,
-    NK_TEXT_ALIGN_TOP         = 0x08,
-    NK_TEXT_ALIGN_MIDDLE      = 0x10,
-    NK_TEXT_ALIGN_BOTTOM      = 0x20
-};
-enum nk_text_alignment {
-    NK_TEXT_LEFT        = NK_TEXT_ALIGN_MIDDLE|NK_TEXT_ALIGN_LEFT,
-    NK_TEXT_CENTERED    = NK_TEXT_ALIGN_MIDDLE|NK_TEXT_ALIGN_CENTERED,
-    NK_TEXT_RIGHT       = NK_TEXT_ALIGN_MIDDLE|NK_TEXT_ALIGN_RIGHT
-};
+
+#include "nk_text_alignment.h"
+
 NK_API void nk_text(struct nk_context*, const char*, int, nk_flags);
 NK_API void nk_text_colored(struct nk_context*, const char*, int, nk_flags, struct nk_color);
 NK_API void nk_text_wrap(struct nk_context*, const char*, int);
@@ -3759,12 +3749,12 @@ NK_API struct nk_vec2 nk_vec2i(int x, int y);
 NK_API struct nk_vec2 nk_vec2v(const float *xy);
 NK_API struct nk_vec2 nk_vec2iv(const int *xy);
 
-NK_API struct nk_rect nk_get_null_rect(void);
-NK_API struct nk_rect nk_rect(float x, float y, float w, float h);
-NK_API struct nk_rect nk_recti(int x, int y, int w, int h);
-NK_API struct nk_rect nk_recta(struct nk_vec2 pos, struct nk_vec2 size);
-NK_API struct nk_rect nk_rectv(const float *xywh);
-NK_API struct nk_rect nk_rectiv(const int *xywh);
+NK_API nk_rect nk_get_null_rect(void);
+NK_API nk_rect nk_rectf(float x, float y, float w, float h);
+NK_API nk_rect nk_recti(int x, int y, int w, int h);
+NK_API nk_rect nk_recta(struct nk_vec2 pos, struct nk_vec2 size);
+NK_API nk_rect nk_rectv(const float *xywh);
+NK_API nk_rect nk_rectiv(const int *xywh);
 NK_API struct nk_vec2 nk_rect_pos(struct nk_rect);
 NK_API struct nk_vec2 nk_rect_size(struct nk_rect);
 /* =============================================================================
@@ -6262,7 +6252,7 @@ nk_get_null_rect(void)
     return nk_null_rect;
 }
 NK_API struct nk_rect
-nk_rect(float x, float y, float w, float h)
+nk_rectf(float x, float y, float w, float h)
 {
     struct nk_rect r;
     r.x = x; r.y = y;
@@ -6282,12 +6272,12 @@ nk_recti(int x, int y, int w, int h)
 NK_API struct nk_rect
 nk_recta(struct nk_vec2 pos, struct nk_vec2 size)
 {
-    return nk_rect(pos.x, pos.y, size.x, size.y);
+    return nk_rectf(pos.x, pos.y, size.x, size.y);
 }
 NK_API struct nk_rect
 nk_rectv(const float *r)
 {
-    return nk_rect(r[0], r[1], r[2], r[3]);
+    return nk_rectf(r[0], r[1], r[2], r[3]);
 }
 NK_API struct nk_rect
 nk_rectiv(const int *r)
@@ -9264,7 +9254,7 @@ nk_draw_nine_slice(struct nk_command_buffer *b, struct nk_rect r,
     img.region[3] = slc->t;
 
     nk_draw_image(b,
-        nk_rect(r.x, r.y, (float)slc->l, (float)slc->t),
+        nk_rectf(r.x, r.y, (float)slc->l, (float)slc->t),
         &img, col);
 
 #define IMG_RGN(x, y, w, h) img.region[0] = (nk_ushort)(x); img.region[1] = (nk_ushort)(y); img.region[2] = (nk_ushort)(w); img.region[3] = (nk_ushort)(h);
@@ -9272,49 +9262,49 @@ nk_draw_nine_slice(struct nk_command_buffer *b, struct nk_rect r,
     /* top-center */
     IMG_RGN(rgnX + slc->l, rgnY, rgnW - slc->l - slc->r, slc->t);
     nk_draw_image(b,
-        nk_rect(r.x + (float)slc->l, r.y, (float)(r.w - slc->l - slc->r), (float)slc->t),
+        nk_rectf(r.x + (float)slc->l, r.y, (float)(r.w - slc->l - slc->r), (float)slc->t),
         &img, col);
 
     /* top-right */
     IMG_RGN(rgnX + rgnW - slc->r, rgnY, slc->r, slc->t);
     nk_draw_image(b,
-        nk_rect(r.x + r.w - (float)slc->r, r.y, (float)slc->r, (float)slc->t),
+        nk_rectf(r.x + r.w - (float)slc->r, r.y, (float)slc->r, (float)slc->t),
         &img, col);
 
     /* center-left */
     IMG_RGN(rgnX, rgnY + slc->t, slc->l, rgnH - slc->t - slc->b);
     nk_draw_image(b,
-        nk_rect(r.x, r.y + (float)slc->t, (float)slc->l, (float)(r.h - slc->t - slc->b)),
+        nk_rectf(r.x, r.y + (float)slc->t, (float)slc->l, (float)(r.h - slc->t - slc->b)),
         &img, col);
 
     /* center */
     IMG_RGN(rgnX + slc->l, rgnY + slc->t, rgnW - slc->l - slc->r, rgnH - slc->t - slc->b);
     nk_draw_image(b,
-        nk_rect(r.x + (float)slc->l, r.y + (float)slc->t, (float)(r.w - slc->l - slc->r), (float)(r.h - slc->t - slc->b)),
+        nk_rectf(r.x + (float)slc->l, r.y + (float)slc->t, (float)(r.w - slc->l - slc->r), (float)(r.h - slc->t - slc->b)),
         &img, col);
 
     /* center-right */
     IMG_RGN(rgnX + rgnW - slc->r, rgnY + slc->t, slc->r, rgnH - slc->t - slc->b);
     nk_draw_image(b,
-        nk_rect(r.x + r.w - (float)slc->r, r.y + (float)slc->t, (float)slc->r, (float)(r.h - slc->t - slc->b)),
+        nk_rectf(r.x + r.w - (float)slc->r, r.y + (float)slc->t, (float)slc->r, (float)(r.h - slc->t - slc->b)),
         &img, col);
 
     /* bottom-left */
     IMG_RGN(rgnX, rgnY + rgnH - slc->b, slc->l, slc->b);
     nk_draw_image(b,
-        nk_rect(r.x, r.y + r.h - (float)slc->b, (float)slc->l, (float)slc->b),
+        nk_rectf(r.x, r.y + r.h - (float)slc->b, (float)slc->l, (float)slc->b),
         &img, col);
 
     /* bottom-center */
     IMG_RGN(rgnX + slc->l, rgnY + rgnH - slc->b, rgnW - slc->l - slc->r, slc->b);
     nk_draw_image(b,
-        nk_rect(r.x + (float)slc->l, r.y + r.h - (float)slc->b, (float)(r.w - slc->l - slc->r), (float)slc->b),
+        nk_rectf(r.x + (float)slc->l, r.y + r.h - (float)slc->b, (float)(r.w - slc->l - slc->r), (float)slc->b),
         &img, col);
 
     /* bottom-right */
     IMG_RGN(rgnX + rgnW - slc->r, rgnY + rgnH - slc->b, slc->r, slc->b);
     nk_draw_image(b,
-        nk_rect(r.x + r.w - (float)slc->r, r.y + r.h - (float)slc->b, (float)slc->r, (float)slc->b),
+        nk_rectf(r.x + r.w - (float)slc->r, r.y + r.h - (float)slc->b, (float)slc->r, (float)slc->b),
         &img, col);
 
 #undef IMG_RGN
@@ -10590,7 +10580,7 @@ nk_convert(struct nk_context *ctx, struct nk_buffer *cmds,
         case NK_COMMAND_NOP: break;
         case NK_COMMAND_SCISSOR: {
             const struct nk_command_scissor *s = (const struct nk_command_scissor*)cmd;
-            nk_draw_list_add_clip(&ctx->draw_list, nk_rect(s->x, s->y, s->w, s->h));
+            nk_draw_list_add_clip(&ctx->draw_list, nk_rectf(s->x, s->y, s->w, s->h));
         } break;
         case NK_COMMAND_LINE: {
             const struct nk_command_line *l = (const struct nk_command_line*)cmd;
@@ -10606,17 +10596,17 @@ nk_convert(struct nk_context *ctx, struct nk_buffer *cmds,
         } break;
         case NK_COMMAND_RECT: {
             const struct nk_command_rect *r = (const struct nk_command_rect*)cmd;
-            nk_draw_list_stroke_rect(&ctx->draw_list, nk_rect(r->x, r->y, r->w, r->h),
+            nk_draw_list_stroke_rect(&ctx->draw_list, nk_rectf(r->x, r->y, r->w, r->h),
                 r->color, (float)r->rounding, r->line_thickness);
         } break;
         case NK_COMMAND_RECT_FILLED: {
             const struct nk_command_rect_filled *r = (const struct nk_command_rect_filled*)cmd;
-            nk_draw_list_fill_rect(&ctx->draw_list, nk_rect(r->x, r->y, r->w, r->h),
+            nk_draw_list_fill_rect(&ctx->draw_list, nk_rectf(r->x, r->y, r->w, r->h),
                 r->color, (float)r->rounding);
         } break;
         case NK_COMMAND_RECT_MULTI_COLOR: {
             const struct nk_command_rect_multi_color *r = (const struct nk_command_rect_multi_color*)cmd;
-            nk_draw_list_fill_rect_multi_color(&ctx->draw_list, nk_rect(r->x, r->y, r->w, r->h),
+            nk_draw_list_fill_rect_multi_color(&ctx->draw_list, nk_rectf(r->x, r->y, r->w, r->h),
                 r->left, r->top, r->right, r->bottom);
         } break;
         case NK_COMMAND_CIRCLE: {
@@ -10685,12 +10675,12 @@ nk_convert(struct nk_context *ctx, struct nk_buffer *cmds,
         } break;
         case NK_COMMAND_TEXT: {
             const struct nk_command_text *t = (const struct nk_command_text*)cmd;
-            nk_draw_list_add_text(&ctx->draw_list, t->font, nk_rect(t->x, t->y, t->w, t->h),
+            nk_draw_list_add_text(&ctx->draw_list, t->font, nk_rectf(t->x, t->y, t->w, t->h),
                 t->string, t->length, t->height, t->foreground);
         } break;
         case NK_COMMAND_IMAGE: {
             const struct nk_command_image *i = (const struct nk_command_image*)cmd;
-            nk_draw_list_add_image(&ctx->draw_list, i->img, nk_rect(i->x, i->y, i->w, i->h), i->col);
+            nk_draw_list_add_image(&ctx->draw_list, i->img, nk_rectf(i->x, i->y, i->w, i->h), i->col);
         } break;
         case NK_COMMAND_CUSTOM: {
             const struct nk_command_custom *c = (const struct nk_command_custom*)cmd;
@@ -20262,7 +20252,7 @@ nk_begin_titled(struct nk_context *ctx, const char *name, const char *title,
         float h = ctx->style.font->height + 2.0f * style->window.header.padding.y +
             (2.0f * style->window.header.label_padding.y);
         struct nk_rect win_bounds = (!(win->flags & NK_WINDOW_MINIMIZED))?
-            win->bounds: nk_rect(win->bounds.x, win->bounds.y, win->bounds.w, h);
+            win->bounds: nk_rectf(win->bounds.x, win->bounds.y, win->bounds.w, h);
 
         /* activate window if hovered and no other window is overlapping this window */
         inpanel = nk_input_has_mouse_click_down_in_rect(&ctx->input, NK_BUTTON_LEFT, win_bounds, nk_true);
@@ -20272,7 +20262,7 @@ nk_begin_titled(struct nk_context *ctx, const char *name, const char *title,
             iter = win->next;
             while (iter) {
                 struct nk_rect iter_bounds = (!(iter->flags & NK_WINDOW_MINIMIZED))?
-                    iter->bounds: nk_rect(iter->bounds.x, iter->bounds.y, iter->bounds.w, h);
+                    iter->bounds: nk_rectf(iter->bounds.x, iter->bounds.y, iter->bounds.w, h);
                 if (NK_INTERSECT(win_bounds.x, win_bounds.y, win_bounds.w, win_bounds.h,
                     iter_bounds.x, iter_bounds.y, iter_bounds.w, iter_bounds.h) &&
                     (!(iter->flags & NK_WINDOW_HIDDEN)))
@@ -20293,7 +20283,7 @@ nk_begin_titled(struct nk_context *ctx, const char *name, const char *title,
             while (iter) {
                 /* try to find a panel with higher priority in the same position */
                 struct nk_rect iter_bounds = (!(iter->flags & NK_WINDOW_MINIMIZED))?
-                iter->bounds: nk_rect(iter->bounds.x, iter->bounds.y, iter->bounds.w, h);
+                iter->bounds: nk_rectf(iter->bounds.x, iter->bounds.y, iter->bounds.w, h);
                 if (NK_INBOX(ctx->input.mouse.pos.x, ctx->input.mouse.pos.y,
                     iter_bounds.x, iter_bounds.y, iter_bounds.w, iter_bounds.h) &&
                     !(iter->flags & NK_WINDOW_HIDDEN))
@@ -20361,7 +20351,7 @@ nk_window_get_bounds(const struct nk_context *ctx)
 {
     NK_ASSERT(ctx);
     NK_ASSERT(ctx->current);
-    if (!ctx || !ctx->current) return nk_rect(0,0,0,0);
+    if (!ctx || !ctx->current) return nk_rectf(0,0,0,0);
     return ctx->current->bounds;
 }
 NK_API struct nk_vec2
@@ -20401,7 +20391,7 @@ nk_window_get_content_region(struct nk_context *ctx)
 {
     NK_ASSERT(ctx);
     NK_ASSERT(ctx->current);
-    if (!ctx || !ctx->current) return nk_rect(0,0,0,0);
+    if (!ctx || !ctx->current) return nk_rectf(0,0,0,0);
     return ctx->current->layout->clip;
 }
 NK_API struct nk_vec2
@@ -22243,7 +22233,7 @@ nk_layout_peek(struct nk_rect *bounds, struct nk_context *ctx)
     NK_ASSERT(ctx->current);
     NK_ASSERT(ctx->current->layout);
     if (!ctx || !ctx->current || !ctx->current->layout) {
-        *bounds = nk_rect(0,0,0,0);
+        *bounds = nk_rectf(0,0,0,0);
         return;
     }
 
@@ -22955,7 +22945,7 @@ nk_widget_bounds(struct nk_context *ctx)
     NK_ASSERT(ctx);
     NK_ASSERT(ctx->current);
     if (!ctx || !ctx->current)
-        return nk_rect(0,0,0,0);
+        return nk_rectf(0,0,0,0);
     nk_layout_peek(&bounds, ctx);
     return bounds;
 }
@@ -28295,7 +28285,7 @@ nk_chart_push_line(struct nk_context *ctx, struct nk_window *win,
             color = g->slots[slot].highlight;
         }
     }
-    nk_fill_rect(out, nk_rect(cur.x - 2, cur.y - 2, 4, 4), 0, color);
+    nk_fill_rect(out, nk_rectf(cur.x - 2, cur.y - 2, 4, 4), 0, color);
 
     /* save current data point position */
     g->slots[slot].last.x = cur.x;
@@ -28535,7 +28525,7 @@ nk_draw_color_picker(struct nk_command_buffer *o, const struct nk_rect *matrix,
             {0,0,255,255}, {255, 0, 255, 255}, {255, 0, 0, 255}
         };
         nk_fill_rect_multi_color(o,
-            nk_rect(hue_bar->x, hue_bar->y + (float)i * (hue_bar->h/6.0f) + 0.5f,
+            nk_rectf(hue_bar->x, hue_bar->y + (float)i * (hue_bar->h/6.0f) + 0.5f,
                 hue_bar->w, (hue_bar->h/6.0f) + 0.5f), hue_colors[i], hue_colors[i],
                 hue_colors[i+1], hue_colors[i+1]);
     }
@@ -28686,7 +28676,7 @@ nk_combo_begin(struct nk_context *ctx, struct nk_window *win,
     if ((is_clicked && is_open && !is_active) || (is_open && !is_active) ||
         (!is_open && !is_active && !is_clicked)) return 0;
     if (!nk_nonblock_begin(ctx, 0, body,
-        (is_clicked && is_open)?nk_rect(0,0,0,0):header, NK_PANEL_COMBO)) return 0;
+        (is_clicked && is_open)?nk_rectf(0,0,0,0):header, NK_PANEL_COMBO)) return 0;
 
     win->popup.type = NK_PANEL_COMBO;
     win->popup.name = hash;

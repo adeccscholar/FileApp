@@ -3,6 +3,10 @@
 #include <vector>
 #include <string>
 #include <functional>
+#include <MyStdTypes.h>
+#include "nk_text_alignment.h"
+#include "nk_rect.h"
+struct nk_context;
 
 namespace nk
 {
@@ -69,36 +73,14 @@ namespace nk
 			window_width(w),
 			status_height(30)
 		{}
-		void draw(nk_context* ctx)
-		{
-			if (nk_begin(ctx, name.c_str(),
-				nk_rect(0.0f, (float)(window_height - status_height),
-						(float)window_width, (float)status_height),
-				NK_WINDOW_BORDER | NK_WINDOW_NO_SCROLLBAR
-			))
-			{
-				nk_layout_row_dynamic(ctx, ctx->current->bounds.h, 1);
-				nk_label(ctx, text.c_str(), NK_TEXT_CENTERED);
-			}
-			nk_end(ctx);
-		}
+		void draw(nk_context* ctx);
 	};
 
 	struct TGroupBox : public IComponent
 	{
 		std::string title;
 		std::vector<std::function<void(nk_context*)>> component_funcs;
-		void draw(nk_context* ctx)
-		{
-			nk_group_begin_titled(ctx, name.c_str(), title.c_str(), nk_panel_flags::NK_WINDOW_BORDER);
-			nk_layout_row_begin(ctx, nk_layout_format::NK_STATIC, 20, 1);
-			for (auto& child : component_funcs)
-			{
-				child(ctx);
-			}
-			nk_layout_row_end(ctx);
-			nk_group_end(ctx);
-		}
+		void draw(nk_context* ctx);
 	};
 
 	struct TGrid : public IComponent

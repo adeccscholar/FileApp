@@ -36,6 +36,9 @@
     <ClCompile Include="NukForm.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="nuk_header_only\nuk_controls.cpp">
+      <Filter>nuk_headers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Independed\FileUtil.h">
@@ -66,6 +69,12 @@
       <Filter>nuk_headers</Filter>
     </ClInclude>
     <ClInclude Include="nuk_header_only\nuk_controls.h">
+      <Filter>nuk_headers</Filter>
+    </ClInclude>
+    <ClInclude Include="nuk_header_only\nk_text_alignment.h">
+      <Filter>nuk_headers</Filter>
+    </ClInclude>
+    <ClInclude Include="nuk_header_only\nk_rect.h">
       <Filter>nuk_headers</Filter>
     </ClInclude>
   </ItemGroup>
