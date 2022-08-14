@@ -15,6 +15,7 @@ namespace nk
 	struct TMemo : public IComponent
 	{
 		std::vector<std::string> data;
+		//setText?
 	};
 
 	struct TLabel : public IComponent
