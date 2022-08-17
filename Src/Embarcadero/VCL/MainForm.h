@@ -28,8 +28,6 @@ __published:	// Von der IDE verwaltete Komponenten
     TSplitter *Splitter1;
     TButton *btnShow;
     TListBox *lbValues;
-    TEdit *edtTest;
-    TButton *Button1;
     void __fastcall FormCreate(TObject *Sender);
     void __fastcall btnCountClick(TObject *Sender);
     void __fastcall btnParseClick(TObject *Sender);

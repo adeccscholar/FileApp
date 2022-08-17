@@ -17,6 +17,7 @@
 
 #include "MyForm.h"
 #include "MyStream.h"
+#include "MyTools.h"
 #include "MyType_Traits.h"
 #include "MyTupleUtils.h"
 #include "MyLogger.h"
@@ -195,6 +196,7 @@ size_t parse(string_type const& source, std::string const& del, container& list)
 
 void TProcess::ShowAction() {
    try {
+      TMyToggle toggle(boActive);
       std::vector<fs::path> files;
       std::set<std::string> extensions;
       my_formlist<EMyFrameworkType::listbox, std::string> mylist(&frm, "lbValues");
@@ -203,7 +205,9 @@ void TProcess::ShowAction() {
 
       auto strPath = frm.Get<EMyFrameworkType::edit, std::string>("edtDirectory");
       if(!strPath) {
-         throw std::runtime_error("directory to show is empty, set a directory before call this function");
+         TMyLogger log(__func__, __FILE__, __LINE__);
+         log.stream() << "directory to show is empty, set a directory before call this function";
+         log.except();
          }
       else {
          frm.GetAsStream<Narrow, EMyFrameworkType::listview>(old_cout, "lvOutput", File_Columns);
@@ -406,7 +410,9 @@ void TProcess::CountAction() {
    try {
       auto strPath = frm.Get<EMyFrameworkType::edit, std::string>("edtDirectory");
       if(!strPath) {
-         throw std::runtime_error("directory to count is empty, set a directory before call this function");
+         TMyLogger log(__func__, __FILE__, __LINE__);
+         log.stream() << "directory to parse is empty, set a directory before call this function";
+         log.except();
          }
       else {
          frm.GetAsStream<Narrow, EMyFrameworkType::listview>(old_cout, "lvOutput", Count_Columns);

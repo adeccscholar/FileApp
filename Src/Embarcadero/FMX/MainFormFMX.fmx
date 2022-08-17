@@ -1,0 +1,142 @@
+object frmMainFMX: TfrmMainFMX
+  Left = 0
+  Top = 0
+  Caption = 'Form1'
+  ClientHeight = 686
+  ClientWidth = 1076
+  FormFactor.Width = 320
+  FormFactor.Height = 480
+  FormFactor.Devices = [Desktop]
+  OnCreate = FormCreate
+  DesignerMasterStyle = 0
+  object Panel1: TPanel
+    Align = MostRight
+    Position.X = 888.000000000000000000
+    Size.Width = 188.000000000000000000
+    Size.Height = 686.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 0
+    object btnCount: TButton
+      Position.X = 24.000000000000000000
+      Position.Y = 16.000000000000000000
+      Size.Width = 145.000000000000000000
+      Size.Height = 22.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 0
+      Text = 'btnCount'
+      OnClick = btnCountClick
+    end
+    object btnShow: TButton
+      Position.X = 24.000000000000000000
+      Position.Y = 46.000000000000000000
+      Size.Width = 145.000000000000000000
+      Size.Height = 22.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 1
+      Text = 'btnShow'
+      OnClick = btnShowClick
+    end
+    object lbValues: TListBox
+      Position.X = 24.000000000000000000
+      Position.Y = 76.000000000000000000
+      Size.Width = 145.000000000000000000
+      Size.Height = 200.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 2
+      DisableFocusEffect = True
+      DefaultItemStyles.ItemStyle = ''
+      DefaultItemStyles.GroupHeaderStyle = ''
+      DefaultItemStyles.GroupFooterStyle = ''
+      Viewport.Width = 141.000000000000000000
+      Viewport.Height = 196.000000000000000000
+    end
+    object btnParse: TButton
+      Position.X = 24.000000000000000000
+      Position.Y = 296.000000000000000000
+      Size.Width = 145.000000000000000000
+      Size.Height = 22.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 3
+      Text = 'btnParse'
+      OnClick = btnParseClick
+    end
+  end
+  object Panel2: TPanel
+    Align = Client
+    Size.Width = 888.000000000000000000
+    Size.Height = 686.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 1
+    object StatusBar1: TStatusBar
+      Position.Y = 664.000000000000000000
+      ShowSizeGrip = True
+      Size.Width = 888.000000000000000000
+      Size.Height = 22.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 0
+      object sbMain: TLabel
+        Position.X = 8.000000000000000000
+        Position.Y = 1.000000000000000000
+        Size.Width = 825.000000000000000000
+        Size.Height = 17.000000000000000000
+        Size.PlatformDefault = False
+        Text = 'sbMain'
+        TabOrder = 0
+      end
+    end
+    object memError: TMemo
+      Touch.InteractiveGestures = [Pan, LongTap, DoubleTap]
+      DataDetectorTypes = []
+      Align = Bottom
+      Position.Y = 504.000000000000000000
+      Size.Width = 888.000000000000000000
+      Size.Height = 160.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 1
+      Viewport.Width = 884.000000000000000000
+      Viewport.Height = 156.000000000000000000
+    end
+    object Splitter1: TSplitter
+      Align = Bottom
+      Cursor = crVSplit
+      MinSize = 20.000000000000000000
+      Position.Y = 496.000000000000000000
+      Size.Width = 888.000000000000000000
+      Size.Height = 8.000000000000000000
+      Size.PlatformDefault = False
+    end
+    object lvOutput: TStringGrid
+      Align = Client
+      CanFocus = True
+      ClipChildren = True
+      Size.Width = 888.000000000000000000
+      Size.Height = 447.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 3
+      Viewport.Width = 884.000000000000000000
+      Viewport.Height = 422.000000000000000000
+    end
+    object Panel3: TPanel
+      Align = Top
+      Size.Width = 888.000000000000000000
+      Size.Height = 49.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 4
+      object lblDirectory: TLabel
+        Position.X = 16.000000000000000000
+        Position.Y = 16.000000000000000000
+        Text = 'lblDirectory'
+        TabOrder = 0
+      end
+      object edtDirectory: TEdit
+        Touch.InteractiveGestures = [LongTap, DoubleTap]
+        TabOrder = 1
+        Position.X = 144.000000000000000000
+        Position.Y = 12.000000000000000000
+        Size.Width = 625.000000000000000000
+        Size.Height = 22.000000000000000000
+        Size.PlatformDefault = False
+      end
+    end
+  end
+end

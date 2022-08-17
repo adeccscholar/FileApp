@@ -75,30 +75,6 @@ object frmMain: TfrmMain
       ItemHeight = 35
       TabOrder = 3
     end
-    object edtTest: TEdit
-      Left = 12
-      Top = 827
-      Width = 291
-      Height = 43
-      Margins.Left = 6
-      Margins.Top = 6
-      Margins.Right = 6
-      Margins.Bottom = 6
-      TabOrder = 4
-      Text = 'edtTest'
-    end
-    object Button1: TButton
-      Left = 33
-      Top = 900
-      Width = 157
-      Height = 52
-      Margins.Left = 6
-      Margins.Top = 6
-      Margins.Right = 6
-      Margins.Bottom = 6
-      Caption = 'Button1'
-      TabOrder = 5
-    end
   end
   object Panel2: TPanel
     Left = 0
