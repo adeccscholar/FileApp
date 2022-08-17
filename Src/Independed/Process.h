@@ -59,7 +59,7 @@ using tplData = std::tuple<std::string,  //  0 project
 class TProcess {
    private:
       TMyForm frm;
-      bool boActive = false;
+      bool boActive = true;
        static std::locale myLoc;
       static std::vector<tplList<Narrow>> Project_Columns;
       static std::vector<tplList<Narrow>> Count_Columns;

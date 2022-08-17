@@ -196,7 +196,7 @@ size_t parse(string_type const& source, std::string const& del, container& list)
 
 void TProcess::ShowAction() {
    try {
-      TMyToggle toggle(boActive);
+      TMyToggle toggle("Guard for boActive", boActive);
       std::vector<fs::path> files;
       std::set<std::string> extensions;
       my_formlist<EMyFrameworkType::listbox, std::string> mylist(&frm, "lbValues");
