@@ -8,6 +8,7 @@
 #include <fstream>
 #include <iomanip>
 #include <sstream>
+#include <functional>
 //---------------------------------------------------------------------------
 
 
