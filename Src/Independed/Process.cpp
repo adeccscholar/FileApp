@@ -469,7 +469,7 @@ void TProcess::ShowFiles(std::ostream& out, fs::path const& strBase, std::vector
                  }
               else {
                  auto loctime = filetime_to_localtime(p);
-                 out << fs::relative(p, strBase) << '\t'
+                 out << fs::relative(p, strBase).string() << '\t'
                      << std::put_time(&loctime, "%d.%m.%Y %T") << '\t'
                      << Convert_Size_KiloByte(fs::file_size(p)) << " KB" << std::endl;
                  }
