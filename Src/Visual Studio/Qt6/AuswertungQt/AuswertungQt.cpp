@@ -46,6 +46,11 @@ void AuswertungQt::Parse() {
 void AuswertungQt::Show() {
    try {
       proc.ShowAction();
+
+
+      std::cerr << ui.lvOutput->rowCount() << std::endl;
+      std::cerr << ui.lvOutput->columnCount() << std::endl;
+      //std::cerr << get_item(5, 0) << std::endl;
    }
    catch (std::exception& ex) {
       QMessageBox msg;
@@ -55,7 +60,27 @@ void AuswertungQt::Show() {
 }
 
 void AuswertungQt::Count() {
+   auto get_item = [this](int iRow, int iCol) {
+      return this->ui.lvOutput->item(iRow, iCol)->text().toStdString();
+   };
+
    try {
+
+      std::vector<size_t> rows(ui.lvOutput->rowCount());
+      std::generate(rows.begin(), rows.end(), [i = 0]() mutable { return i++; });
+      //std::for_each(rows.begin(), rows.end(), [get_item](auto val) { std::cerr << get_item(val, 0) << std::endl; });
+
+      /*
+      QList<QTableWidgetItem*> selected = ui.lvOutput->selectedItems();
+      if(!selected.isEmpty()) {
+         std::set<size_t> sel;
+         for (auto item : selected) sel.insert(item->row());
+         std::for_each(sel.begin(), sel.end(), [get_item](auto val) { std::cerr << get_item(val, 0) << std::endl; });
+         }
+      */
+      QItemSelectionModel* selectModel = ui.lvOutput->selectionModel();
+      foreach(QModelIndex index, selectModel->selectedRows()) std::cerr << get_item(index.row(), 0) << std::endl;
+
       proc.CountAction();
    }
    catch (std::exception& ex) {
@@ -64,3 +89,4 @@ void AuswertungQt::Count() {
       msg.exec();
    }
 }
+

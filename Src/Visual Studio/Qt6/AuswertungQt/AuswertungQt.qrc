@@ -1,4 +1,12 @@
 <RCC>
-    <qresource prefix="AuswertungQt">
+    <qresource prefix="/Data">
+        <file>TCobra.qss</file>
+        <file>adecc_scholar.css</file>
+    </qresource>
+    <qresource prefix="/images">
+        <file>adecc_scholar.css</file>
+        <file>background.jpg</file>
+        <file>banner.jpg</file>
+        <file>dropdown-pfeil.png</file>
     </qresource>
 </RCC>
