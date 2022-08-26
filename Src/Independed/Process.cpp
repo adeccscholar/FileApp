@@ -217,6 +217,9 @@ void TProcess::ShowAction() {
                    << std::setprecision(3) << time.count()/1000. << " sec, "
                    << files.size() << " files found" << std::endl;
          ShowFiles(std::cout, fsPath, files);
+         // !!!!!
+         std::cerr << frm.GetTableRows("lvOutput") << ", " << frm.GetTableColumns("lvOutput") << std::endl;
+         std::cerr << *frm.GetTableValue<std::string>("lvOutput", 5, 0) << std::endl;
          }
       }
    catch(std::exception& ex) {
@@ -405,6 +408,9 @@ void TProcess::ParseAction() {
    }
 
 void TProcess::CountAction() {
+   auto rows = frm.GetSelectedTableRows("lvOutput");
+   std::for_each(rows.begin(), rows.end(), [this](auto val) { std::cerr << *this->frm.GetTableValue<std::string>("lvOutput", val, 0);  });
+
    try {
       auto strPath = frm.Get<EMyFrameworkType::edit, std::string>("edtDirectory");
       if(!strPath) {
