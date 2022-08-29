@@ -36,6 +36,7 @@
 #include <set>
 #include <iterator>
 #include <algorithm>
+#include <numeric>
 #include <functional>
 #include <exception>
 #include <fstream>
@@ -519,6 +520,13 @@ void TProcess::CountAction() {
             if (item) sum += *item; 
             });
       std::cerr << "Summe cpp in table: " << sum << std::endl;
+
+      my_formlist<EMyFrameworkType::listview, size_t> mylist(&frm, "lvOutput", 7);
+      sum = std::accumulate(mylist.begin(), mylist.end(), 0);
+      std::cerr << "Summe h in table iterator: " << sum << std::endl;
+
+      //std::copy(mylist.begin(), mylist.end(), std::ostream_iterator<std::string>(std::cerr, "\n"));
+
       // --------------------------------------------------------
       frm.GetAsStream<Latin, EMyFrameworkType::listview>(old_cout, "lvOutput", Count_Columns);
       showMode = EShowVariante::empty;
