@@ -11,6 +11,7 @@
 #include <Vcl.ExtCtrls.hpp>
 //---------------------------------------------------------------------------
 #include "Process.h"
+#include <Vcl.Menus.hpp>
 
 class TfrmMain : public TForm
 {
@@ -28,10 +29,13 @@ __published:	// Von der IDE verwaltete Komponenten
     TSplitter *Splitter1;
     TButton *btnShow;
     TListBox *lbValues;
+   TPopupMenu *ProjectMenu;
+   TMenuItem *S1;
     void __fastcall FormCreate(TObject *Sender);
     void __fastcall btnCountClick(TObject *Sender);
     void __fastcall btnParseClick(TObject *Sender);
     void __fastcall btnShowClick(TObject *Sender);
+          
 private:	// Benutzer-Deklarationen
     TProcess proc;
 public:		// Benutzer-Deklarationen

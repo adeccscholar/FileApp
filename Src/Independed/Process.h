@@ -54,12 +54,13 @@ using tplData = std::tuple<std::string,  //  0 project
                            std::string,  // 11 formtype
                            std::string>; // 12 design class
 
-
+enum class EShowVariante : int { empty, Count, Files, Projects };
 
 class TProcess {
    private:
       TMyForm frm;
       bool boActive = false;
+      EShowVariante showMode = EShowVariante::empty;
        static std::locale myLoc;
       static std::vector<tplList<Latin>> Project_Columns;
       static std::vector<tplList<Latin>> Count_Columns;
@@ -76,9 +77,12 @@ class TProcess {
       void CountAction();
 
    private:
+     void ParseDirectory(void);
      void Parse(fs::path const& fsPath, std::vector<fs::path>& project_files, std::vector<tplData>& projects);
      void ParseProject(fs::path const& base, fs::path const& strFile, std::vector<tplData>& projects);
+     void ShowFiles(void);
      void ShowFiles(std::ostream& out, fs::path const& strBase, std::vector<fs::path> const& files);
+     void CountFiles(void);
 
 
 };

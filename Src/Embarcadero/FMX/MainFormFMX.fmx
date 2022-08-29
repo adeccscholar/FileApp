@@ -47,6 +47,7 @@ object frmMainFMX: TfrmMainFMX
       DefaultItemStyles.ItemStyle = ''
       DefaultItemStyles.GroupHeaderStyle = ''
       DefaultItemStyles.GroupFooterStyle = ''
+      MultiSelectStyle = Default
       Viewport.Width = 141.000000000000000000
       Viewport.Height = 196.000000000000000000
     end

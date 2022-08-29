@@ -50,7 +50,23 @@
         <property name="orientation">
          <enum>Qt::Vertical</enum>
         </property>
-        <widget class="QTableWidget" name="lvOutput"/>
+        <widget class="QTableWidget" name="lvOutput">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+           <horstretch>0</horstretch>
+           <verstretch>2</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="alternatingRowColors">
+          <bool>true</bool>
+         </property>
+         <attribute name="verticalHeaderMinimumSectionSize">
+          <number>23</number>
+         </attribute>
+         <attribute name="verticalHeaderDefaultSectionSize">
+          <number>25</number>
+         </attribute>
+        </widget>
         <widget class="QTextEdit" name="memError"/>
        </widget>
       </item>
@@ -86,7 +102,14 @@
         </widget>
        </item>
        <item>
-        <widget class="QListWidget" name="lbValues"/>
+        <widget class="QListWidget" name="lbValues">
+         <property name="selectionMode">
+          <enum>QAbstractItemView::ExtendedSelection</enum>
+         </property>
+         <property name="selectionBehavior">
+          <enum>QAbstractItemView::SelectRows</enum>
+         </property>
+        </widget>
        </item>
        <item>
         <widget class="QPushButton" name="btnParse">

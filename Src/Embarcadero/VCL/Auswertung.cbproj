@@ -7,9 +7,8 @@
         <MainSource>Auswertung.cpp</MainSource>
         <Base>True</Base>
         <Config Condition="'$(Config)'==''">Debug</Config>
-        <Platform Condition="'$(Platform)'==''">Win32</Platform>
-        <CC_Suffix Condition="'$(CC_Suffix)'==''">c</CC_Suffix>
-        <TargetedPlatforms>1</TargetedPlatforms>
+        <Platform Condition="'$(Platform)'==''">Win64</Platform>
+        <TargetedPlatforms>3</TargetedPlatforms>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Config)'=='Base' or '$(Base)'!=''">
         <Base>true</Base>
@@ -35,6 +34,12 @@
         <Cfg_1>true</Cfg_1>
         <Base>true</Base>
     </PropertyGroup>
+    <PropertyGroup Condition="('$(Platform)'=='Win64' and '$(Cfg_1)'=='true') or '$(Cfg_1_Win64)'!=''">
+        <Cfg_1_Win64>true</Cfg_1_Win64>
+        <CfgParent>Cfg_1</CfgParent>
+        <Cfg_1>true</Cfg_1>
+        <Base>true</Base>
+    </PropertyGroup>
     <PropertyGroup Condition="'$(Config)'=='Release' or '$(Cfg_2)'!=''">
         <Cfg_2>true</Cfg_2>
         <CfgParent>Base</CfgParent>
@@ -42,6 +47,12 @@
     </PropertyGroup>
     <PropertyGroup Condition="('$(Platform)'=='Win32' and '$(Cfg_2)'=='true') or '$(Cfg_2_Win32)'!=''">
         <Cfg_2_Win32>true</Cfg_2_Win32>
+        <CfgParent>Cfg_2</CfgParent>
+        <Cfg_2>true</Cfg_2>
+        <Base>true</Base>
+    </PropertyGroup>
+    <PropertyGroup Condition="('$(Platform)'=='Win64' and '$(Cfg_2)'=='true') or '$(Cfg_2_Win64)'!=''">
+        <Cfg_2_Win64>true</Cfg_2_Win64>
         <CfgParent>Cfg_2</CfgParent>
         <Cfg_2>true</Cfg_2>
         <Base>true</Base>
@@ -87,6 +98,12 @@
         <PackageImports>adortl;appanalytics;bcbie;bcbsmp;bindcomp;bindcompdbx;bindcompfmx;bindcompvcl;bindcompvclsmp;bindcompvclwinx;bindengine;CloudService;CustomIPTransport;cxExportRS28;cxGridEMFRS28;cxGridRS28;cxLibraryRS28;cxPivotGridChartRS28;cxPivotGridOLAPRS28;cxPivotGridRS28;cxSchedulerGridRS28;cxSchedulerRibbonStyleEventEditorRS28;cxSchedulerRS28;cxSchedulerTreeBrowserRS28;cxSchedulerWebServiceStorageRS28;cxTreeListdxBarPopupMenuRS28;cxTreeListRS28;cxVerticalGridRS28;DataSnapClient;DataSnapCommon;DataSnapConnectors;DatasnapConnectorsFreePascal;DataSnapFireDAC;DataSnapIndy10ServerTransport;DataSnapNativeClient;DataSnapProviderClient;DataSnapServer;DataSnapServerMidas;dbexpress;dbrtl;dbxcds;DbxClientDriver;DbxCommonDriver;DBXDb2Driver;DBXFirebirdDriver;DBXInformixDriver;DBXInterBaseDriver;DBXMSSQLDriver;DBXMySQLDriver;DBXOdbcDriver;DBXOracleDriver;DBXSqliteDriver;DBXSybaseASADriver;DBXSybaseASEDriver;dsnap;dsnapcon;dsnapxml;dxADOEMFRS28;dxADOServerModeRS28;dxBarDBNavRS28;dxBarExtDBItemsRS28;dxBarExtItemsRS28;dxBarRS28;dxChartControlRS28;dxCloudServiceLibraryRS28;dxComnRS28;dxCoreRS28;dxdborRS28;dxdbtrRS28;dxDBXServerModeRS28;dxDockingRS28;dxEMFRS28;dxFireDACEMFRS28;dxFireDACServerModeRS28;dxFlowChartAdvancedCustomizeFormRS28;dxFlowChartDesignerRS28;dxFlowChartLayoutsRS28;dxFlowChartRS28;dxGanttControlRS28;dxGaugeControlRS28;dxGDIPlusRS28;dxHttpIndyRequestRS28;dxMapControlRS28;dxmdsRS28;dxNavBarRS28;dxOrgChartAdvancedCustomizeFormRS28;dxorgcRS28;dxPDFViewerRS28;dxPSCoreRS28;dxPScxCommonRS28;dxPScxExtCommonRS28;dxPScxGridLnkRS28;dxPScxPCProdRS28;dxPScxPivotGridLnkRS28;dxPScxSchedulerLnkRS28;dxPScxTLLnkRS28;dxPScxVGridLnkRS28;dxPSdxDBOCLnkRS28;dxPSdxDBTVLnkRS28;dxPSdxFCLnkRS28;dxPSdxGaugeControlLnkRS28;dxPSdxLCLnkRS28;dxPSdxMapControlLnkRS28;dxPSdxOCLnkRS28;dxPSdxPDFViewerLnkRS28;dxPSdxSpreadSheetLnkRS28;dxPSLnksRS28;dxPsPrVwAdvRS28;dxPSPrVwRibbonRS28;dxPSRichEditControlLnkRS28;dxRibbonCustomizationFormRS28;dxRibbonRS28;dxRichEditControlCoreRS28;dxRichEditControlRS28;dxRichEditCoreRS28;dxRichEditDocumentModelRS28;dxServerModeRS28;dxSkinsCoreRS28;dxSpellCheckerRS28;dxSpreadSheetConditionalFormattingDialogsRS28;dxSpreadSheetCoreConditionalFormattingDialogsRS28;dxSpreadSheetCoreRS28;dxSpreadSheetReportDesignerRS28;dxSpreadSheetRS28;dxTabbedMDIRS28;dxTileControlRS28;dxtrmdRS28;dxWizardControlRS28;emsclient;emsclientfiredac;emsedge;emshosting;emsserverresource;FireDAC;FireDACADSDriver;FireDACASADriver;FireDACCommon;FireDACCommonDriver;FireDACCommonODBC;FireDACDb2Driver;FireDACDBXDriver;FireDACDSDriver;FireDACIBDriver;FireDACInfxDriver;FireDACMongoDBDriver;FireDACMSAccDriver;FireDACMSSQLDriver;FireDACMySQLDriver;FireDACODBCDriver;FireDACOracleDriver;FireDACPgDriver;FireDACSqliteDriver;FireDACTDataDriver;fmx;fmxase;fmxdae;fmxFireDAC;fmxobj;IndyCore;IndyIPClient;IndyIPCommon;IndyIPServer;IndyProtocols;IndySystem;inet;inetdb;inetdbxpress;RESTBackendComponents;RESTComponents;rtl;soapmidas;soaprtl;soapserver;tethering;vcl;vclactnband;vcldb;vcldsnap;vcledge;vclFireDAC;vclie;vclimg;VCLRESTComponents;VclSmp;vcltouch;vclwinx;vclx;xmlrtl;$(PackageImports)</PackageImports>
         <IncludePath>$(BDSINCLUDE)\windows\vcl;$(IncludePath)</IncludePath>
         <BCC_PCHName_Clang>AuswertungPCH1.h</BCC_PCHName_Clang>
+        <DCC_Namespace>Winapi;System.Win;Data.Win;Datasnap.Win;Web.Win;Soap.Win;Xml.Win;$(DCC_Namespace)</DCC_Namespace>
+        <BT_BuildType>Debug</BT_BuildType>
+        <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
+        <VerInfo_Locale>1033</VerInfo_Locale>
+        <Manifest_File>$(BDS)\bin\default_app.manifest</Manifest_File>
+        <AppEnableRuntimeThemes>true</AppEnableRuntimeThemes>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_1)'!=''">
         <BCC_OptimizeForSpeed>false</BCC_OptimizeForSpeed>
@@ -119,6 +136,14 @@
         <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
         <VerInfo_Locale>1033</VerInfo_Locale>
     </PropertyGroup>
+    <PropertyGroup Condition="'$(Cfg_1_Win64)'!=''">
+        <AppEnableRuntimeThemes>true</AppEnableRuntimeThemes>
+        <AppDPIAwarenessMode>PerMonitorV2</AppDPIAwarenessMode>
+        <LinkPackageImports>rtl.bpi;vcl.bpi;fmx.bpi</LinkPackageImports>
+        <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
+        <VerInfo_Locale>1033</VerInfo_Locale>
+        <Icon_MainIcon>adecc_Scholar.ico</Icon_MainIcon>
+    </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_2)'!=''">
         <Defines>NDEBUG;$(Defines)</Defines>
         <TASM_Debugging>None</TASM_Debugging>
@@ -127,6 +152,10 @@
         <AppEnableRuntimeThemes>true</AppEnableRuntimeThemes>
         <AppDPIAwarenessMode>PerMonitorV2</AppDPIAwarenessMode>
         <BCC_UseClassicCompiler>false</BCC_UseClassicCompiler>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Cfg_2_Win64)'!=''">
+        <AppEnableRuntimeThemes>true</AppEnableRuntimeThemes>
+        <AppDPIAwarenessMode>PerMonitorV2</AppDPIAwarenessMode>
     </PropertyGroup>
     <ItemGroup>
         <None Include="..\..\..\..\adecc_Scholar\adecc_Scholar\MyLogger.h">
@@ -1113,7 +1142,7 @@
             </Deployment>
             <Platforms>
                 <Platform value="Win32">True</Platform>
-                <Platform value="Win64">False</Platform>
+                <Platform value="Win64">True</Platform>
             </Platforms>
         </BorlandProject>
         <ProjectFileVersion>12</ProjectFileVersion>

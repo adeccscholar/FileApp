@@ -6,8 +6,7 @@
         <MainSource>AuswertungFMX.cpp</MainSource>
         <Base>True</Base>
         <Config Condition="'$(Config)'==''">Debug</Config>
-        <Platform Condition="'$(Platform)'==''">Win32</Platform>
-        <CC_Suffix Condition="'$(CC_Suffix)'==''">c</CC_Suffix>
+        <Platform Condition="'$(Platform)'==''">Win64</Platform>
         <TargetedPlatforms>19</TargetedPlatforms>
         <AppType>Application</AppType>
     </PropertyGroup>
@@ -88,10 +87,13 @@
         <AllPackageLibs>rtl.lib;fmx.lib</AllPackageLibs>
         <_TCHARMapping>wchar_t</_TCHARMapping>
         <Multithreaded>true</Multithreaded>
-        <IncludePath>..\..\..\pugiXML\src\;..\..\Independed\;..\..\..\..\adecc_Scholar\adecc_Scholar\;D:\Projekte\GitHub\FileApp\Src\Embarcadero\FMX\;$(IncludePath)</IncludePath>
-        <ILINK_LibraryPath>..\..\..\pugiXML\src\;..\..\Independed\;..\..\..\..\adecc_Scholar\adecc_Scholar\;D:\Projekte\GitHub\FileApp\Src\Embarcadero\FMX\;$(ILINK_LibraryPath)</ILINK_LibraryPath>
+        <IncludePath>..\..\..\pugiXML\src\;..\..\Independed\;..\..\..\adecc_Scholar\adecc_Scholar\;D:\Projekte\GitHub\FileApp\Src\Embarcadero\FMX\;$(IncludePath)</IncludePath>
+        <ILINK_LibraryPath>..\..\..\pugiXML\src\;..\..\Independed\;D:\Projekte\GitHub\FileApp\Src\Embarcadero\FMX\;$(ILINK_LibraryPath)</ILINK_LibraryPath>
         <SanitizedProjectName>AuswertungFMX</SanitizedProjectName>
         <Defines>BUILD_WITH_FMX;$(Defines)</Defines>
+        <RunBCCOutOfProcess>true</RunBCCOutOfProcess>
+        <SubProcessesNumber>8</SubProcessesNumber>
+        <BCC_EnableBatchCompilation>true</BCC_EnableBatchCompilation>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base_Android)'!=''">
         <PackageImports>bindcomp;bindcompdbx;bindcompfmx;bindengine;CloudService;CustomIPTransport;DataSnapClient;DataSnapCommon;DataSnapFireDAC;DataSnapNativeClient;DataSnapProviderClient;dbexpress;dbrtl;dbxcds;DbxClientDriver;DbxCommonDriver;DBXInterBaseDriver;DBXSqliteDriver;dsnap;dsnapxml;emsclient;emsclientfiredac;FireDAC;FireDACCommon;FireDACCommonDriver;FireDACDBXDriver;FireDACDSDriver;FireDACIBDriver;FireDACSqliteDriver;fmx;fmxFireDAC;IndyCore;IndyIPClient;IndyIPCommon;IndyIPServer;IndyProtocols;IndySystem;inet;RESTBackendComponents;RESTComponents;rtl;soapmidas;soaprtl;soapserver;tethering;xmlrtl;$(PackageImports)</PackageImports>
@@ -180,6 +182,10 @@
     <PropertyGroup Condition="'$(Cfg_1_Win64)'!=''">
         <AppEnableRuntimeThemes>true</AppEnableRuntimeThemes>
         <AppDPIAwarenessMode>PerMonitorV2</AppDPIAwarenessMode>
+        <LinkPackageImports>rtl.bpi;fmx.bpi</LinkPackageImports>
+        <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
+        <VerInfo_Locale>1033</VerInfo_Locale>
+        <Icon_MainIcon>adecc_Scholar.ico</Icon_MainIcon>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_2)'!=''">
         <Defines>NDEBUG;$(Defines)</Defines>

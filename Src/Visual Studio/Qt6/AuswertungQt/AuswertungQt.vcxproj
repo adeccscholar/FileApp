@@ -111,15 +111,15 @@
     <ResourceCompile Include="AuswertungQt.rc" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\..\..\adecc_Scholar\adecc_Scholar\MyConvert.h" />
-    <ClInclude Include="..\..\..\..\..\adecc_Scholar\adecc_Scholar\MyForm.h" />
-    <ClInclude Include="..\..\..\..\..\adecc_Scholar\adecc_Scholar\MyFramework_Selection.h" />
-    <ClInclude Include="..\..\..\..\..\adecc_Scholar\adecc_Scholar\MyLogger.h" />
-    <ClInclude Include="..\..\..\..\..\adecc_Scholar\adecc_Scholar\MyStdTypes.h" />
-    <ClInclude Include="..\..\..\..\..\adecc_Scholar\adecc_Scholar\MyStream.h" />
-    <ClInclude Include="..\..\..\..\..\adecc_Scholar\adecc_Scholar\MyTools.h" />
-    <ClInclude Include="..\..\..\..\..\adecc_Scholar\adecc_Scholar\MyTupleUtils.h" />
-    <ClInclude Include="..\..\..\..\..\adecc_Scholar\adecc_Scholar\MyType_Traits.h" />
+    <ClInclude Include="..\..\..\..\adecc_Scholar\adecc_Scholar\MyConvert.h" />
+    <ClInclude Include="..\..\..\..\adecc_Scholar\adecc_Scholar\MyForm.h" />
+    <ClInclude Include="..\..\..\..\adecc_Scholar\adecc_Scholar\MyFramework_Selection.h" />
+    <ClInclude Include="..\..\..\..\adecc_Scholar\adecc_Scholar\MyLogger.h" />
+    <ClInclude Include="..\..\..\..\adecc_Scholar\adecc_Scholar\MyStdTypes.h" />
+    <ClInclude Include="..\..\..\..\adecc_Scholar\adecc_Scholar\MyStream.h" />
+    <ClInclude Include="..\..\..\..\adecc_Scholar\adecc_Scholar\MyTools.h" />
+    <ClInclude Include="..\..\..\..\adecc_Scholar\adecc_Scholar\MyTupleUtils.h" />
+    <ClInclude Include="..\..\..\..\adecc_Scholar\adecc_Scholar\MyType_Traits.h" />
     <ClInclude Include="..\..\..\Independed\FileUtil.h" />
     <ClInclude Include="..\..\..\Independed\Process.h" />
   </ItemGroup>

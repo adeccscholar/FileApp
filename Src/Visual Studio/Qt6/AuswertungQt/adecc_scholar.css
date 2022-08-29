@@ -102,6 +102,7 @@ QGroupBox::title {
 
 QTableWidget {
 	background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #00FF00, stop:1 #004C00);
+	alternate-background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #00FF00, stop:1 #004C00);
 	border-radius: 10px;
 	border: 2px solid gray;
 	selection-background-color: red;
